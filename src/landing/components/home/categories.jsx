@@ -1,43 +1,45 @@
 import { FiArrowRight } from "react-icons/fi";
 
-const categories = [
-  { name: "Football", icon: "⚽", bg: "bg-purple-50" },
-  { name: "Badminton", icon: "🏸", bg: "bg-yellow-50" },
-  { name: "Running", icon: "🏃", bg: "bg-blue-50" },
-  { name: "Tennis", icon: "🎾", bg: "bg-green-50" },
-  { name: "Swimming", icon: "🏊", bg: "bg-cyan-50" },
-  { name: "Basketball", icon: "🏀", bg: "bg-orange-50" },
+const categoryList = [
+  { name: "Running", imgUrl: "category-running.png" },
+  { name: "Tennis", imgUrl: "category-tennis.png" },
+  { name: "Basketball", imgUrl: "category-basketball.png" },
+  { name: "Football", imgUrl: "category-football.png" },
+  { name: "Badminton", imgUrl: "category-badminton.png" },
+  { name: "Swimming", imgUrl: "category-swimming.png" },
 ];
 
-const Categories = () => {
+const CategoriesSection = () => {
   return (
-    <section className="py-20">
-      <div className="container mx-auto px-4">
-        {/* Header */}
-        <div className="flex justify-between items-center mb-10">
-          <h2 className="text-3xl font-bold">
-            Browse By <span className="text-primary">Categories</span>
-          </h2>
-          <a href="#" className="flex items-center gap-2 text-primary font-medium hover:gap-3 transition-all">
-            <span>See All Categories</span>
-            <FiArrowRight />
-          </a>
-        </div>
-
-        {/* Categories Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6">
-          {categories.map((cat, idx) => (
-            <div key={idx} className="group text-center cursor-pointer">
-              <div className={`${cat.bg} rounded-2xl p-6 mb-3 transition-all group-hover:shadow-lg group-hover:-translate-y-1`}>
-                <div className="text-5xl">{cat.icon}</div>
+    <section id="category-section" className="container mx-auto pb-20">
+      <div className="flex justify-between items-center">
+        <h2 className="font-bold text-2xl">Browse By Categories</h2>
+        <a href="#" className="flex gap-2 text-primary font-medium hover:gap-3 transition-all">
+          <span className="self-center">See All Categories</span>
+          <FiArrowRight className="self-center" />
+        </a>
+      </div>
+      <div className="grid grid-cols-6 gap-12 mt-8">
+        {categoryList.map((category, index) => (
+          <div
+            className="rounded-lg bg-gradient-to-r from-[#F1F1F1] to-[#F7F7F7] w-full aspect-square flex justify-center transition-all duration-300 hover:shadow-lg cursor-pointer"
+            key={index}
+          >
+            <div className="self-center text-center">
+              <img
+                src={`/src/assets/${category.imgUrl}`}
+                className="w-[86px] h-[86px] mb-[10px] mx-auto object-contain"
+                alt={category.name}
+              />
+              <div className="text-primary font-medium text-xl text-center">
+                {category.name}
               </div>
-              <h3 className="font-semibold text-gray-800">{cat.name}</h3>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </section>
   );
 };
 
-export default Categories;
+export default CategoriesSection;

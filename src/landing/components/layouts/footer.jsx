@@ -1,52 +1,41 @@
-import logo from '/src/assets/logo.svg';
-
 const Footer = () => {
   return (
-    <footer className="bg-dark-alternate text-white">
-      <div className="container mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-          {/* Logo & Description */}
-          <div className="lg:col-span-2">
-            <img src={logo} alt="SPORTON" className="h-8 mb-4 brightness-0 invert" />
-            <p className="text-gray-400 leading-relaxed mt-4">
-              Engineered for endurance and designed for speed. Experience gear
-              that moves as fast as you do.
-            </p>
+    <footer className="bg-dark-alternate text-white mt-52">
+      <div className="container mx-auto flex justify-between pt-14 pb-24">
+        <div className="w-105">
+          <img
+            src="/src/assets/logo-footer.svg"
+            alt="logo sporton footer"
+            className="w-[187px] h-[44px]"
+          />
+          <p className="mt-8">
+            <p>Engineered for endurance and designed for speed.</p>
+            <p>Experience gear that moves as fast as you do.</p>
+          </p>
+        </div>
+        <div className="w-96 grid grid-cols-2 gap-8">
+          <div className="flex gap-4 flex-col">
+            <h3 className="font-semibold text-lg mb-2">Menu</h3>
+            <a href="#" className="text-white-300 hover:text-white transition-colors">Home</a>
+            <a href="#" className="text-white-300 hover:text-white transition-colors">Categories</a>
+            <a href="#" className="text-white-300 hover:text-white transition-colors">Products</a>
+            <a href="#" className="text-white-300 hover:text-white transition-colors">About Us</a>
           </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold text-lg mb-4">Quick Links</h4>
-            <ul className="space-y-3">
-              <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Home</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Categories</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Products</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">About Us</a></li>
-            </ul>
-          </div>
-
-          {/* Social Media */}
-          <div>
-            <h4 className="font-semibold text-lg mb-4">Follow Us</h4>
-            <ul className="space-y-3">
-              <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Instagram</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">Facebook</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">TikTok</a></li>
-              <li><a href="#" className="text-gray-400 hover:text-primary transition-colors">YouTube</a></li>
-            </ul>
+          <div className="flex gap-4 flex-col">
+            <h3 className="font-semibold text-lg mb-2">Follow Us</h3>
+            <a href="#" className="text-white-300 hover:text-white transition-colors">Instagram</a>
+            <a href="#" className="text-white-300 hover:text-white transition-colors">Facebook</a>
+            <a href="#" className="text-white-300 hover:text-white transition-colors">TikTok</a>
+            <a href="#" className="text-white-300 hover:text-white transition-colors">YouTube</a>
           </div>
         </div>
       </div>
-
-      {/* Bottom Bar */}
-      <div className="border-t border-gray-800">
-        <div className="container mx-auto px-4 py-6">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <p className="text-gray-400 text-sm">SportOn © 2025 All Rights Reserved.</p>
-            <div className="flex gap-6">
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors text-sm">Privacy Policy</a>
-              <a href="#" className="text-gray-400 hover:text-primary transition-colors text-sm">Terms & Conditions</a>
-            </div>
+      <div className="border-t border-white/15">
+        <div className="container mx-auto py-6 flex justify-between px-4">
+          <div className="text-white-400">SportsOn © 2025 All Rights Reserved.</div>
+          <div className="w-96 grid grid-cols-2 gap-8">
+            <a href="#" className="text-white-400 hover:text-white transition-colors">Privacy Policy</a>
+            <a href="#" className="text-white-400 hover:text-white transition-colors">Terms Conditions</a>
           </div>
         </div>
       </div>
