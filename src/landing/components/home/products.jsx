@@ -2,18 +2,18 @@ import Button from "../ui/button";
 import { FiPlus } from "react-icons/fi";
 
 const productList = [
-  { name: "SportsOn Product 1", category: "Football", price: 440000, imgUrl: "football-shoes (1) 1.png" },
-  { name: "SportsOn Product 2", category: "Running", price: 329000, imgUrl: "shoes grey.png" },
-  { name: "SportsOn Product 3", category: "Football", price: 458000, imgUrl: "football-shoes (1).png" },
-  { name: "SportsOn Product 4", category: "Running", price: 230000, imgUrl: "shoes red.png" },
-  { name: "SportsOn Product 5", category: "Running", price: 119000, imgUrl: "sportshirt black.png" },
-  { name: "SportsOn Product 6", category: "Running", price: 119000, imgUrl: "sportshirt red.png" },
-  { name: "SportsOn Product 7", category: "Tennis", price: 999000, imgUrl: "racket hijau.png" },
-  { name: "SportsOn Product 8", category: "Tennis", price: 999000, imgUrl: "racket merah.png" },
-  { name: "SportsOn Product 9", category: "Basketball", price: 900000, imgUrl: "basketball.png" },
-  { name: "SportsOn Product 10", category: "Football", price: 1000000, imgUrl: "football.png" },
-  { name: "SportsOn Product 11", category: "Tennis", price: 420000, imgUrl: "tennis ball.png" },
-  { name: "SportsOn Product 12", category: "Volleyball", price: 650000, imgUrl: "volleyball.png" },
+  { name: "SportOn FootFastball V1", category: "Football", price: 440000, imgUrl: "football-shoes (1) 1.png" },
+  { name: "SportOn HyperFast V2", category: "Running", price: 329000, imgUrl: "shoes grey.png" },
+  { name: "SportOn FootFastball V3", category: "Football", price: 458000, imgUrl: "football-shoes (1).png" },
+  { name: "SportOn HyperFast V4", category: "Running", price: 230000, imgUrl: "shoes red.png" },
+  { name: "SportOn Hypershirt Black", category: "Running", price: 119000, imgUrl: "sportshirt black.png" },
+  { name: "SportOn Hypershirt Red", category: "Running", price: 119000, imgUrl: "sportshirt red.png" },
+  { name: "SportOn Racket Green", category: "Tennis", price: 999000, imgUrl: "racket hijau.png" },
+  { name: "SportOn Racket Black Red", category: "Tennis", price: 999000, imgUrl: "racket merah.png" },
+  { name: "SportOn Basketball", category: "Basketball", price: 900000, imgUrl: "basketball.png" },
+  { name: "SportOn Football", category: "Football", price: 1000000, imgUrl: "football.png" },
+  { name: "SportOn Tennisball", category: "Tennis", price: 420000, imgUrl: "tennis ball.png" },
+  { name: "SportOn Volleyball", category: "Volleyball", price: 650000, imgUrl: "volleyball.png" },
 ];
 
 const ProductsSection = () => {
