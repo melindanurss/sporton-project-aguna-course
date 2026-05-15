@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { FiSearch, FiShoppingBag, FiX } from "react-icons/fi";
 
 const Header = () => {
@@ -7,14 +8,22 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  // Fungsi scroll ke section dengan offset yang pas
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      section.scrollIntoView({ behavior: "smooth" });
+      // Offset 80px untuk menghindari header tertutup
+      const offset = 80;
+      const sectionTop = section.getBoundingClientRect().top + window.pageYOffset;
+      window.scrollTo({
+        top: sectionTop - offset,
+        behavior: "smooth"
+      });
       setActiveSection(sectionId);
     }
   };
 
+  // Deteksi section aktif saat scrolling
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["hero-section", "category-section", "products-section"];
@@ -35,12 +44,18 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Fungsi pencarian produk
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       const productsSection = document.getElementById("products-section");
       if (productsSection) {
-        productsSection.scrollIntoView({ behavior: "smooth" });
+        const offset = 80;
+        const sectionTop = productsSection.getBoundingClientRect().top + window.pageYOffset;
+        window.scrollTo({
+          top: sectionTop - offset,
+          behavior: "smooth"
+        });
         setActiveSection("products-section");
       }
       console.log("Searching for:", searchQuery);
@@ -51,79 +66,74 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
-      <div className="flex justify-between gap-10 container mx-auto py-7">
-        <img
-          src="/images/logo.svg"
-          alt="sporton logo"
-          className="w-[127px] h-[30px] cursor-pointer"
-          onClick={() => scrollToSection("hero-section")}
-        />
-        <nav className="flex gap-24 font-medium">
-          <a
-            href="#hero-section"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("hero-section");
-            }}
-            className={`relative transition-all duration-300 hover:text-primary ${
+      <div className="flex justify-between items-center container mx-auto py-5 px-4">
+        {/* Logo */}
+        <div className="relative w-[127px] h-[30px] cursor-pointer" onClick={() => scrollToSection("hero-section")}>
+          <Image
+            src="/images/logo.svg"
+            alt="sporton logo"
+            fill
+            className="object-contain"
+            priority
+          />
+        </div>
+
+        {/* Navigation - SAMA PERSIS DENGAN REFERENSI */}
+        <nav className="hidden md:flex items-center gap-24">
+          <button
+            onClick={() => scrollToSection("hero-section")}
+            className={`relative text-[18px] transition-all duration-300 font-poppins font-medium ${
               activeSection === "hero-section"
-                ? "text-primary after:content-[''] after:block after:bg-primary after:rounded-full after:h-[3px] after:w-1/2 after:absolute after:left-1/2 after:-translate-x-1/2 after:translate-y-1"
-                : "text-black-600 after:content-[''] after:block after:bg-transparent after:rounded-full after:h-[3px] after:w-0 after:absolute after:left-1/2 after:-translate-x-1/2 after:translate-y-1 after:transition-all after:duration-300 hover:after:w-1/2 hover:after:bg-primary"
+                ? "text-black after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-0.5 after:bg-primary after:rounded-full"
+                : "text-black hover:text-primary after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-primary after:rounded-full after:transition-all after:duration-300 hover:after:w-1/2"
             }`}
           >
             Home
-          </a>
-          <a
-            href="#category-section"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("category-section");
-            }}
-            className={`relative transition-all duration-300 hover:text-primary ${
+          </button>
+          <button
+            onClick={() => scrollToSection("category-section")}
+            className={`relative text-[18px] transition-all duration-300 font-poppins font-medium ${
               activeSection === "category-section"
-                ? "text-primary after:content-[''] after:block after:bg-primary after:rounded-full after:h-[3px] after:w-1/2 after:absolute after:left-1/2 after:-translate-x-1/2 after:translate-y-1"
-                : "text-black-600 after:content-[''] after:block after:bg-transparent after:rounded-full after:h-[3px] after:w-0 after:absolute after:left-1/2 after:-translate-x-1/2 after:translate-y-1 after:transition-all after:duration-300 hover:after:w-1/2 hover:after:bg-primary"
+                ? "text-black after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-0.5 after:bg-primary after:rounded-full"
+                : "text-black hover:text-primary after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-primary after:rounded-full after:transition-all after:duration-300 hover:after:w-1/2"
             }`}
           >
             Categories
-          </a>
-          <a
-            href="#products-section"
-            onClick={(e) => {
-              e.preventDefault();
-              scrollToSection("products-section");
-            }}
-            className={`relative transition-all duration-300 hover:text-primary ${
+          </button>
+          <button
+            onClick={() => scrollToSection("products-section")}
+            className={`relative text-[18px] transition-all duration-300 font-poppins font-medium ${
               activeSection === "products-section"
-                ? "text-primary after:content-[''] after:block after:bg-primary after:rounded-full after:h-[3px] after:w-1/2 after:absolute after:left-1/2 after:-translate-x-1/2 after:translate-y-1"
-                : "text-black-600 after:content-[''] after:block after:bg-transparent after:rounded-full after:h-[3px] after:w-0 after:absolute after:left-1/2 after:-translate-x-1/2 after:translate-y-1 after:transition-all after:duration-300 hover:after:w-1/2 hover:after:bg-primary"
+                ? "text-black after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-1/2 after:h-0.5 after:bg-primary after:rounded-full"
+                : "text-black hover:text-primary after:content-[''] after:absolute after:-bottom-2 after:left-1/2 after:-translate-x-1/2 after:w-0 after:h-0.5 after:bg-primary after:rounded-full after:transition-all after:duration-300 hover:after:w-1/2"
             }`}
           >
             Explore Products
-          </a>
+          </button>
         </nav>
-        <div className="flex gap-10">
-          <div className="relative">
-            <FiSearch 
-              size={24} 
-              className="cursor-pointer hover:text-primary transition-colors" 
-              onClick={() => setIsSearchOpen(true)}
-            />
-          </div>
-          <div className="relative cursor-pointer hover:text-primary transition-colors">
-            <FiShoppingBag size={24} />
-            <div className="bg-primary rounded-full w-3.5 h-3.5 absolute -top-1 -right-1 text-[10px] text-white text-center leading-[14px]">
+
+        {/* Icons */}
+        <div className="flex items-center gap-10">
+          <FiSearch 
+            size={22} 
+            className="cursor-pointer hover:text-primary transition-colors text-black" 
+            onClick={() => setIsSearchOpen(true)}
+          />
+          <div className="relative cursor-pointer hover:text-primary transition-colors text-black">
+            <FiShoppingBag size={22} />
+            <span className="bg-primary rounded-full w-4 h-4 absolute -top-2 -right-2 text-[10px] text-white text-center leading-4 font-poppins font-medium">
               3
-            </div>
+            </span>
           </div>
         </div>
       </div>
 
+      {/* Search Modal */}
       {isSearchOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20">
           <div className="bg-white rounded-2xl w-full max-w-2xl mx-4 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-300">
             <div className="flex justify-between items-center p-4 border-b">
-              <h3 className="font-semibold text-lg">Search Products</h3>
+              <h3 className="font-semibold text-lg font-poppins">Search Products</h3>
               <FiX 
                 size={24} 
                 className="cursor-pointer hover:text-primary transition-colors" 
@@ -139,13 +149,13 @@ const Header = () => {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search for sportswear, shoes, accessories..."
-                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-primary transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:border-primary transition-colors font-poppins"
                 autoFocus
               />
               <div className="flex gap-3 mt-4">
                 <button
                   type="submit"
-                  className="flex-1 bg-primary text-white py-2 rounded-xl hover:bg-primary/85 transition-all hover:scale-105 font-medium"
+                  className="flex-1 bg-primary text-white py-2 rounded-xl hover:bg-primary/85 transition-all hover:scale-105 font-medium font-poppins"
                 >
                   Search
                 </button>
@@ -155,14 +165,14 @@ const Header = () => {
                     setIsSearchOpen(false);
                     setSearchQuery("");
                   }}
-                  className="flex-1 bg-gray-100 text-gray-700 py-2 rounded-xl hover:bg-gray-200 transition-all font-medium"
+                  className="flex-1 bg-gray-100 text-gray-700 py-2 rounded-xl hover:bg-gray-200 transition-all font-medium font-poppins"
                 >
                   Cancel
                 </button>
               </div>
             </form>
             <div className="p-4 border-t bg-gray-50 rounded-b-2xl">
-              <p className="text-sm text-gray-500 mb-2">Popular searches:</p>
+              <p className="text-sm text-gray-500 mb-2 font-poppins">Popular searches:</p>
               <div className="flex gap-2 flex-wrap">
                 {["Running Shoes", "Football", "Basketball", "Tennis Racket"].map((item) => (
                   <button
@@ -173,7 +183,7 @@ const Header = () => {
                         handleSearch(new Event('submit'));
                       }, 100);
                     }}
-                    className="px-3 py-1 bg-white border border-gray-300 rounded-full text-sm hover:border-primary hover:text-primary transition-colors"
+                    className="px-3 py-1 bg-white border border-gray-300 rounded-full text-sm hover:border-primary hover:text-primary transition-colors font-poppins"
                   >
                     {item}
                   </button>

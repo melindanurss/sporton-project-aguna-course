@@ -2,6 +2,7 @@
 import { FiFastForward } from "react-icons/fi";
 import { useState, useEffect } from "react";
 import Button from "../ui/button";
+import Image from "next/image";
 
 const HeroSection = () => {
   const [currentImage, setCurrentImage] = useState(0);
@@ -84,16 +85,15 @@ const HeroSection = () => {
                 <img
                   src="/images/icon-play-video.svg"
                   alt="icon playvideo"
-                  className="w-[29px] h-[29px]"
+                  width={29}
+                  height={29}
                 />
               </Button>
             </div>
           </div>
-          
-          {/* Gambar img-hero.png (tetap seperti asli) */}
           {currentImage === 0 && (
             <img
-              src={images[0]}
+              src="/images/img-hero.png"
               width={700}
               height={950}
               alt="image sporton hero"
@@ -102,11 +102,9 @@ const HeroSection = () => {
               }`}
             />
           )}
-          
-          {/* Gambar human-running.png (didekatkan dengan judul) */}
           {currentImage === 1 && (
             <img
-              src={images[1]}
+              src="/images/human-running.png"
               alt="human running"
               className={`absolute transition-all duration-500 ease-in-out ${
                 isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
@@ -130,8 +128,6 @@ const HeroSection = () => {
           className="absolute -right-[100px] top-1/2 -translate-y-1/2"
         />
       </section>
-
-      {/* Video Modal */}
       {isVideoOpen && (
         <div 
           className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
