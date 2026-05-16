@@ -38,10 +38,19 @@ const ProductsSection = () => {
                 height={300}
                 className="aspect-square object-contain"
               />
-              <Button
-                variant="square" 
-                size="square"
-                className="w-10 h-10 p-2! absolute right-3 top-3">
+              <Button 
+                className="absolute right-3 top-3 bg-orange-500! text-white! hover:bg-orange-600!"
+                style={{ 
+                  width: 39.75, 
+                  height: 39.75, 
+                  borderRadius: 0,
+                  padding: 0,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  minWidth: 32
+                }}
+              >
                 <FiPlus size={24} />
               </Button>
             </div>
