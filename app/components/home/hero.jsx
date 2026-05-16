@@ -1,34 +1,12 @@
 "use client";
 import { FiFastForward } from "react-icons/fi";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Button from "../ui/button";
 import Image from "next/image";
 
 const HeroSection = () => {
-  const [currentImage, setCurrentImage] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
   const [isVideoOpen, setIsVideoOpen] = useState(false);
-  
-  const images = [
-    "/images/img-hero.png",
-    "/images/human-running.png"
-  ];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setIsTransitioning(true);
-      setTimeout(() => {
-        setCurrentImage((prev) => (prev + 1) % images.length);
-        setTimeout(() => {
-          setIsTransitioning(false);
-        }, 50);
-      }, 300);
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  // Fungsi untuk Explore More - scroll ke section products
   const handleExploreMore = () => {
     const productsSection = document.getElementById('products-section');
     if (productsSection) {
@@ -37,7 +15,6 @@ const HeroSection = () => {
         block: 'start'
       });
     } else {
-      // Alternative: scroll ke bawah halaman
       window.scrollTo({
         top: window.innerHeight,
         behavior: 'smooth'
@@ -45,29 +22,35 @@ const HeroSection = () => {
     }
   };
 
-  // Fungsi untuk Watch Video - membuka modal video
   const handleWatchVideo = () => {
     setIsVideoOpen(true);
   };
 
-  // Fungsi untuk close modal
   const closeVideoModal = () => {
     setIsVideoOpen(false);
   };
 
   return (
     <>
-      <section id="hero-section" className="container mx-auto h-screen flex">
+      <section id="hero-section" className="container mx-auto h-screen flex relative">
         <div className="relative self-center">
-          <img
-            src="/images/img-basketball-gradasi.png"
-            width={432}
-            height={423}
-            alt="image sporton"
-            className="grayscale absolute left-0 -top-20"
-          />
+          {/* Basketball Ornament - Kiri dengan gradasi yang jelas */}
+          <div className="absolute left-0 -top-20 z-0">
+            <Image
+              src="/images/img-basketball-gradasi.png"
+              width={432}
+              height={423}
+              alt="image sporton"
+              className="opacity-100"
+              priority
+            />
+          </div>
+          
+          {/* Content */}
           <div className="relative ml-40 w-full">
-            <div className="text-primary italic">Friday Sale, 50%</div>
+            <div className="inline-flex items-center bg-[#FFF0ED] rounded-full px-5 py-2">
+              <span className="text-primary italic">Friday Sale, 50%</span>
+            </div>
             <h1 className="font-extrabold text-[95px] italic bg-gradient-to-b leading-tight from-black to-[#979797] bg-clip-text text-transparent">
               WEAR YOUR <br /> TOP-QUALITY <br /> SPORTSWEAR
             </h1>
@@ -77,12 +60,12 @@ const HeroSection = () => {
               Limitless motion.
             </p>
             <div className="flex gap-5 mt-14">
-              <Button onClick={handleExploreMore}>
+              <Button onClick={handleExploreMore} className="rounded-none">
                 Explore More <FiFastForward />
               </Button>
-              <Button variant="ghost" onClick={handleWatchVideo}>
+              <Button variant="ghost" onClick={handleWatchVideo} className="rounded-none">
                 Watch Video{" "}
-                <img
+                <Image
                   src="/images/icon-play-video.svg"
                   alt="icon playvideo"
                   width={29}
@@ -91,43 +74,31 @@ const HeroSection = () => {
               </Button>
             </div>
           </div>
-          {currentImage === 0 && (
-            <img
+          
+          {/* Hero Image - img-hero.png presisi */}
+          <div className="absolute -right-40 top-1/2 -translate-y-1/2">
+            <Image
               src="/images/img-hero.png"
               width={700}
               height={950}
               alt="image sporton hero"
-              className={`absolute -right-5 top-1/2 -translate-y-1/2 transition-all duration-500 ease-in-out ${
-                isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-              }`}
             />
-          )}
-          {currentImage === 1 && (
-            <img
-              src="/images/human-running.png"
-              alt="human running"
-              className={`absolute transition-all duration-500 ease-in-out ${
-                isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-              }`}
-              style={{
-                right: '15%',
-                top: '47%',
-                transform: 'translateY(-50%)',
-                width: '500px',
-                height: 'auto',
-                objectFit: 'contain',
-              }}
-            />
-          )}
+          </div>
         </div>
-        <img
-          src="/images/img-ornament-hero.svg"
-          width={420}
-          height={420}
-          alt="image sporton"
-          className="absolute -right-[100px] top-1/2 -translate-y-1/2"
-        />
+        
+        {/* Ornament SVG - ukuran sedang dan presisi */}
+        <div className="absolute -right-[350px] top-1/2 -translate-y-1/2">
+          <Image
+            src="/images/img-ornament-hero.svg"
+            width={420}
+            height={420}
+            alt="image sporton"
+            priority
+          />
+        </div>
       </section>
+
+      {/* Video Modal - Watch Video */}
       {isVideoOpen && (
         <div 
           className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"
@@ -137,7 +108,6 @@ const HeroSection = () => {
             className="relative bg-black rounded-2xl max-w-4xl w-full aspect-video"
             onClick={(e) => e.stopPropagation()}
           >
-            {/* Tombol Close */}
             <button
               onClick={closeVideoModal}
               className="absolute -top-12 right-0 text-white hover:text-gray-300 transition-colors"
@@ -147,10 +117,9 @@ const HeroSection = () => {
               </svg>
             </button>
             
-            {/* Video Player */}
             <iframe
               className="w-full h-full rounded-2xl"
-              src="https://www.youtube.com/embed/13Mt8tG84Lw?si=oVphCFc-gvWVIALh"
+              src="https://www.youtube.com/embed/13Mt8tG84Lw?si=oVphCFc-gvWVIALh&autoplay=1"
               title="Sporton Video"
               frameBorder="0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
