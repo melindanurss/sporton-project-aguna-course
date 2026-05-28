@@ -4,6 +4,27 @@
 
 @layer base {
   body {
-    @apply font-poppins antialiased;
+    @apply font-poppins antialiased bg-white;
+  }
+}
+
+@layer components {
+  .container {
+    @apply max-w-7xl mx-auto;
+  }
+}
+
+@layer utilities {
+  .text-primary {
+    color: #f97316;
+  }
+  .bg-primary {
+    background-color: #f97316;
+  }
+  .bg-primary-light {
+    background-color: #fff7ed;
+  }
+  .border-primary {
+    border-color: #f97316;
   }
 }

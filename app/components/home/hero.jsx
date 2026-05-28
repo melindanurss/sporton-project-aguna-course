@@ -87,7 +87,7 @@ const HeroSection = () => {
         </div>
         
         {/* Ornament SVG - ukuran sedang dan presisi */}
-        <div className="absolute -right-[350px] top-1/2 -translate-y-1/2">
+        <div className="absolute -right-[530px] top-1/2 -translate-y-1/2">
           <Image
             src="/images/img-ornament-hero.svg"
             width={420}

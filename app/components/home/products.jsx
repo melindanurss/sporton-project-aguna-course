@@ -1,21 +1,8 @@
 "use client";
+import Link from "next/link";
 import Button from "../ui/button";
 import { FiPlus } from "react-icons/fi";
-
-const productList = [
-  { name: "SportOn FootFastball V1", category: "Football", price: 440000, imgUrl: "football-shoes (1) 1.png" },
-  { name: "SportOn HyperFast V2", category: "Running", price: 329000, imgUrl: "shoes grey.png" },
-  { name: "SportOn FootFastball V3", category: "Football", price: 458000, imgUrl: "football-shoes (1).png" },
-  { name: "SportOn HyperFast V4", category: "Running", price: 230000, imgUrl: "shoes red.png" },
-  { name: "SportOn Hypershirt Black", category: "Running", price: 119000, imgUrl: "sportshirt black.png" },
-  { name: "SportOn Hypershirt Red", category: "Running", price: 119000, imgUrl: "sportshirt red.png" },
-  { name: "SportOn Racket Green", category: "Tennis", price: 999000, imgUrl: "racket hijau.png" },
-  { name: "SportOn Racket Black Red", category: "Tennis", price: 999000, imgUrl: "racket merah.png" },
-  { name: "SportOn Basketball", category: "Basketball", price: 900000, imgUrl: "basketball.png" },
-  { name: "SportOn Football", category: "Football", price: 1000000, imgUrl: "football.png" },
-  { name: "SportOn Tennisball", category: "Tennis", price: 420000, imgUrl: "tennis ball.png" },
-  { name: "SportOn Volleyball", category: "Volleyball", price: 650000, imgUrl: "volleyball.png" },
-];
+import { productList } from "../../utils/products-data";
 
 const ProductsSection = () => {
   return (
@@ -24,31 +11,32 @@ const ProductsSection = () => {
         <span className="text-primary">OUR </span>PRODUCTS
       </h2>
       <div className="grid grid-cols-4 gap-5">
-        {productList.map((product, index) => (
-          <a
-            href="#"
-            key={index}
-            className="p-1.5 bg-white hover:drop-shadow-xl duration-300"
+        {productList.map((product) => (
+          <Link
+            href={`/product/${product.id}`}
+            key={product.id}
+            className="p-1.5 bg-white hover:drop-shadow-xl duration-300 cursor-pointer block"
           >
-            <div className="bg-primary-light aspect-square w-full flex justify-center items-center relative">
-              <img
-                src={`/images/${product.imgUrl}`}
-                alt={product.name}
-                width={300}
-                height={300}
-                className="aspect-square object-contain"
-              />
-              <Button 
+            <div 
+              className="bg-primary-light w-full aspect-square relative"
+              style={{ 
+                backgroundImage: `url('/images/${product.imgUrl}')`,
+                backgroundSize: 'contain',
+                backgroundRepeat: 'no-repeat',
+                backgroundPosition: 'center'
+              }}
+            >
+              <Button
                 className="absolute right-3 top-3 bg-orange-500! text-white! hover:bg-orange-600!"
-                style={{ 
-                  width: 39.75, 
-                  height: 39.75, 
+                style={{
+                  width: 39.75,
+                  height: 39.75,
                   borderRadius: 0,
                   padding: 0,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  minWidth: 32
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  minWidth: 32,
                 }}
               >
                 <FiPlus size={24} />
@@ -58,15 +46,14 @@ const ProductsSection = () => {
             <div className="flex justify-between mb-8">
               <div className="text-gray-500">{product.category}</div>
               <div className="font-medium text-primary">
-                {Intl.NumberFormat("id-ID", {
+                {new Intl.NumberFormat("id-ID", {
                   style: "currency",
                   currency: "IDR",
                   minimumFractionDigits: 0,
-                  maximumFractionDigits: 0,
                 }).format(product.price)}
               </div>
             </div>
-          </a>
+          </Link>
         ))}
       </div>
     </section>
