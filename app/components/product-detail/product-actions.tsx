@@ -30,6 +30,7 @@ const ProductActions = ({
   const { push } = useRouter();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
+  const [isHoveringCheckout, setIsHoveringCheckout] = useState(false);
 
   const handleAddToCart = () => {
     setAdded(true);
@@ -60,17 +61,41 @@ const ProductActions = ({
         </div>
       </div>
 
-      {/* Add to Cart Button */}
-      <Button className="flex-1" onClick={handleAddToCart}>
-        {added ? <FiCheck size={20} /> : <FiShoppingBag size={20} />}
-        {added ? "Added to Cart" : "Add to Cart"}
-      </Button>
+      {/* Add to Cart Button - Dinamis & Interaktif */}
+      <button
+        onClick={handleAddToCart}
+        className={`
+          flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-medium
+          transition-all duration-300 transform
+          ${added 
+            ? "bg-green-500 text-white scale-105" 
+            : "bg-primary text-white hover:bg-primary/85 hover:scale-105 active:scale-95"
+          }
+        `}
+      >
+        {added ? <FiCheck size={20} className="animate-pulse" /> : <FiShoppingBag size={20} />}
+        <span>{added ? "Added to Cart" : "Add to Cart"}</span>
+      </button>
 
-      {/* Checkout Now Button */}
-      <Button variant="dark" className="flex-1" onClick={() => push("/checkout")}>
-        Checkout Now
-        <FiArrowRight size={20} />
-      </Button>
+      {/* Checkout Now Button - Interaktif & Dinamis (Sesuai Desain UI) */}
+      <button
+        onClick={() => push("/checkout")}
+        onMouseEnter={() => setIsHoveringCheckout(true)}
+        onMouseLeave={() => setIsHoveringCheckout(false)}
+        className="
+          flex-1 flex items-center justify-center gap-2 py-3 px-6 rounded-xl font-medium
+          bg-dark text-white
+          transition-all duration-300 transform
+          hover:bg-primary hover:scale-105 hover:shadow-lg
+          active:scale-95
+        "
+      >
+        <span>Checkout Now</span>
+        <FiArrowRight 
+          size={20} 
+          className={`transition-all duration-300 ${isHoveringCheckout ? "translate-x-1" : "translate-x-0"}`}
+        />
+      </button>
     </div>
   );
 };

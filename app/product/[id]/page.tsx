@@ -26,32 +26,33 @@ const ProductDetailPage = ({ params }: { params: { id: string } }) => {
   }
 
   return (
-    <main className="container mx-auto py-40 flex gap-12">
-      {/* Image Section - DIPAKSA 1:1 */}
-      <div className="bg-primary-light aspect-square min-w-140 flex justify-center items-center overflow-hidden">
-        <Image
-          src={`/images/${product.imgUrl}`}
-          width={550}
-          height={550}
-          alt={product.name}
-          className="w-full h-full object-contain"
-          style={{ objectFit: "contain" }}
-        />
-      </div>
+    <div className="container mx-auto py-16">
+      <div className="flex gap-12">
+        {/* Image Section */}
+        <div className="bg-primary-light aspect-square min-w-140 flex justify-center items-center overflow-hidden rounded-2xl">
+          <Image
+            src={`/images/${product.imgUrl}`}
+            width={550}
+            height={550}
+            alt={product.name}
+            className="w-full h-full object-contain"
+          />
+        </div>
 
-      {/* Product Info Section */}
-      <div className="w-full py-7">
-        <h1 className="font-bold text-5xl mb-6">{product.name}</h1>
-        <div className="bg-primary-light rounded-full text-primary py-2 px-6 w-fit mb-5">
-          {product.category}
+        {/* Product Info Section */}
+        <div className="w-full py-4">
+          <h1 className="font-bold text-5xl mb-4">{product.name}</h1>
+          <div className="bg-primary-light rounded-full text-primary py-2 px-6 w-fit mb-5">
+            {product.category}
+          </div>
+          <p className="leading-loose mb-6 text-gray-700">{product.description}</p>
+          <div className="text-primary text-[32px] font-semibold mb-8">
+            {formatPrice(product.price)}
+          </div>
+          <ProductActions product={product} />
         </div>
-        <p className="leading-loose mb-8">{product.description}</p>
-        <div className="text-primary text-[32px] font-semibold mb-12">
-          {formatPrice(product.price)}
-        </div>
-        <ProductActions product={product} />
       </div>
-    </main>
+    </div>
   );
 };
 
