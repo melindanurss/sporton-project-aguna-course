@@ -31,19 +31,46 @@ export const useCart = () => {
   return context;
 };
 
+// DATA AWAL UNTUK CART (SEEDER)
+const initialCart: CartItem[] = [
+  {
+    id: 3,
+    name: "SportOn HyperSoccer v2",
+    category: "Football",
+    price: 458000,
+    imgUrl: "football-shoes (1).png",
+    qty: 2,
+  },
+  {
+    id: 5,
+    name: "SportOn Hypershirt Black",
+    category: "Running",
+    price: 119000,
+    imgUrl: "sportshirt black.png",
+    qty: 1,
+  },
+];
+
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([]);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     const savedCart = localStorage.getItem("sporton-cart");
     if (savedCart) {
       setCart(JSON.parse(savedCart));
+    } else {
+      // Jika tidak ada data di localStorage, gunakan data awal
+      setCart(initialCart);
     }
+    setIsLoaded(true);
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("sporton-cart", JSON.stringify(cart));
-  }, [cart]);
+    if (isLoaded) {
+      localStorage.setItem("sporton-cart", JSON.stringify(cart));
+    }
+  }, [cart, isLoaded]);
 
   const addToCart = (product: CartItem, quantity: number) => {
     setCart((prevCart) => {
