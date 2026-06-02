@@ -1,3 +1,4 @@
+// app/utils/price-formatter.ts
 const priceFormatter = (price: number): string => {
   return new Intl.NumberFormat("id-ID", {
     style: "currency",

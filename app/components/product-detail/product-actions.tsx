@@ -7,9 +7,9 @@ import {
   FiShoppingBag,
   FiCheck,
 } from "react-icons/fi";
-import Button from "../ui/button";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useCart } from "../../context/CartContext";
 
 type TProduct = {
   id: number;
@@ -21,21 +21,22 @@ type TProduct = {
 };
 
 const ProductActions = ({
-  onAddToCart,
   product,
 }: {
-  onAddToCart?: (qty: number, product?: TProduct) => void;
   product?: TProduct;
 }) => {
   const { push } = useRouter();
+  const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const [isHoveringCheckout, setIsHoveringCheckout] = useState(false);
 
   const handleAddToCart = () => {
-    setAdded(true);
-    onAddToCart?.(qty, product);
-    setTimeout(() => setAdded(false), 1500);
+    if (product) {
+      addToCart(product, qty);
+      setAdded(true);
+      setTimeout(() => setAdded(false), 1500);
+    }
   };
 
   return (
@@ -61,7 +62,7 @@ const ProductActions = ({
         </div>
       </div>
 
-      {/* Add to Cart Button - Dinamis & Interaktif */}
+      {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
         className={`
@@ -77,7 +78,7 @@ const ProductActions = ({
         <span>{added ? "Added to Cart" : "Add to Cart"}</span>
       </button>
 
-      {/* Checkout Now Button - Interaktif & Dinamis (Sesuai Desain UI) */}
+      {/* Checkout Now Button */}
       <button
         onClick={() => push("/checkout")}
         onMouseEnter={() => setIsHoveringCheckout(true)}

@@ -6,11 +6,27 @@ import { FiCreditCard, FiTrash2, FiPlus, FiMinus } from "react-icons/fi";
 import CardWithHeader from "../ui/card-with-header";
 import { useRouter } from "next/navigation";
 import { useCart } from "../../context/CartContext";
+import { OrderFormData } from "./order-information";
 
-const CartItems = () => {
+const CartItems = ({ 
+  isFormValid = false,
+  orderData = null 
+}: { 
+  isFormValid?: boolean;
+  orderData?: OrderFormData | null;
+}) => {
   const { push } = useRouter();
   const { cart, removeFromCart, updateQuantity, getCartTotal } = useCart();
   const totalPrice = getCartTotal();
+
+  const handleProceedToPayment = () => {
+    if (isFormValid && orderData) {
+      // Simpan data order ke localStorage
+      localStorage.setItem("sporton-order-data", JSON.stringify(orderData));
+      localStorage.setItem("sporton-cart-data", JSON.stringify(cart));
+      push("/payment");
+    }
+  };
 
   if (cart.length === 0) {
     return (
@@ -30,7 +46,6 @@ const CartItems = () => {
       <div className="overflow-auto max-h-[400px]">
         {cart.map((item) => (
           <div className="border-b border-gray-200 p-4 flex gap-3 items-center" key={item.id}>
-            {/* Gambar */}
             <div className="bg-primary-light aspect-square w-16 flex justify-center items-center rounded-lg">
               <Image
                 src={`/images/${item.imgUrl}`}
@@ -40,8 +55,6 @@ const CartItems = () => {
                 className="aspect-square object-contain"
               />
             </div>
-            
-            {/* Info Produk */}
             <div className="flex-1">
               <div className="text-sm font-medium">{item.name}</div>
               <div className="text-primary text-sm font-semibold">{priceFormatter(item.price)}</div>
@@ -61,8 +74,6 @@ const CartItems = () => {
                 </button>
               </div>
             </div>
-            
-            {/* Harga Total & Tombol Hapus */}
             <div className="text-right">
               <div className="font-semibold">{priceFormatter(item.price * item.qty)}</div>
               <button
@@ -77,16 +88,25 @@ const CartItems = () => {
         ))}
       </div>
 
-      {/* Total */}
       <div className="border-t border-gray-200 p-4">
         <div className="flex justify-between font-semibold mb-4">
           <div className="text-sm">Total</div>
           <div className="text-primary text-xl">{priceFormatter(totalPrice)}</div>
         </div>
-        <Button variant="dark" className="w-full" onClick={() => push("/payment")}>
+        <Button
+          variant="dark"
+          className={`w-full transition-all duration-300 ${!isFormValid ? "opacity-50 cursor-not-allowed" : "hover:scale-105"}`}
+          onClick={handleProceedToPayment}
+          disabled={!isFormValid}
+        >
           <FiCreditCard size={18} />
           Proceed to Payment
         </Button>
+        {!isFormValid && (
+          <p className="text-xs text-red-500 text-center mt-2">
+            Silakan isi data diri terlebih dahulu (Nama, No. WhatsApp, Alamat)
+          </p>
+        )}
       </div>
     </CardWithHeader>
   );

@@ -6,10 +6,21 @@ import FileUpload from "../ui/file-upload";
 import priceFormatter from "@/app/utils/price-formatter";
 import Button from "../ui/button";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const PaymentSteps = () => {
   const { push } = useRouter();
-  const totalAmount = 1035000; // 458000*2 + 119000
+  const [totalAmount, setTotalAmount] = useState(0);
+
+  useEffect(() => {
+    // Ambil data cart dari localStorage
+    const savedCart = localStorage.getItem("sporton-cart");
+    if (savedCart) {
+      const cart = JSON.parse(savedCart);
+      const total = cart.reduce((sum: number, item: any) => sum + (item.price * item.qty), 0);
+      setTotalAmount(total);
+    }
+  }, []);
 
   const uploadAndConfirm = () => {
     push("/order-status");

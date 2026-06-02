@@ -2,17 +2,32 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { FiSearch, FiShoppingBag, FiX } from "react-icons/fi";
+import { useCart } from "../../context/CartContext";
+import CartPopup from "../ui/cart-popup";
 
 const Header = () => {
   const [activeSection, setActiveSection] = useState("hero-section");
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const { getCartCount } = useCart();
+  const cartCount = getCartCount();
 
-  // Fungsi scroll ke section dengan offset yang pas
+  // Close cart when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      const target = event.target;
+      if (isCartOpen && !target.closest(".cart-popup") && !target.closest(".cart-icon")) {
+        setIsCartOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isCartOpen]);
+
   const scrollToSection = (sectionId) => {
     const section = document.getElementById(sectionId);
     if (section) {
-      // Offset 80px untuk menghindari header tertutup
       const offset = 80;
       const sectionTop = section.getBoundingClientRect().top + window.pageYOffset;
       window.scrollTo({
@@ -23,7 +38,6 @@ const Header = () => {
     }
   };
 
-  // Deteksi section aktif saat scrolling
   useEffect(() => {
     const handleScroll = () => {
       const sections = ["hero-section", "category-section", "products-section"];
@@ -44,7 +58,6 @@ const Header = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Fungsi pencarian produk
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
@@ -58,7 +71,6 @@ const Header = () => {
         });
         setActiveSection("products-section");
       }
-      console.log("Searching for:", searchQuery);
       setSearchQuery("");
       setIsSearchOpen(false);
     }
@@ -78,7 +90,7 @@ const Header = () => {
           />
         </div>
 
-        {/* Navigation - SAMA PERSIS DENGAN REFERENSI */}
+        {/* Navigation */}
         <nav className="hidden md:flex items-center gap-24">
           <button
             onClick={() => scrollToSection("hero-section")}
@@ -119,14 +131,26 @@ const Header = () => {
             className="cursor-pointer hover:text-primary transition-colors text-black" 
             onClick={() => setIsSearchOpen(true)}
           />
-          <div className="relative cursor-pointer hover:text-primary transition-colors text-black">
+          <div 
+            className="relative cursor-pointer hover:text-primary transition-colors text-black cart-icon"
+            onClick={() => setIsCartOpen(!isCartOpen)}
+          >
             <FiShoppingBag size={22} />
-            <span className="bg-primary rounded-full w-4 h-4 absolute -top-2 -right-2 text-[10px] text-white text-center leading-4 font-poppins font-medium">
-              3
-            </span>
+            {cartCount > 0 && (
+              <span className="bg-primary rounded-full w-4 h-4 absolute -top-2 -right-2 text-[10px] text-white text-center leading-4 font-poppins font-medium">
+                {cartCount}
+              </span>
+            )}
           </div>
         </div>
       </div>
+
+      {/* Cart Popup */}
+      {isCartOpen && (
+        <div className="absolute right-4 top-full mt-2 cart-popup">
+          <CartPopup onClose={() => setIsCartOpen(false)} />
+        </div>
+      )}
 
       {/* Search Modal */}
       {isSearchOpen && (
