@@ -2,9 +2,24 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --dark: #111111;
+  --dark-alternate: #1b1918;
+  --primary: #ff5f3f;
+  --primary-light: #f4ebeb;
+}
+
 @layer base {
+  html {
+    overflow-x: hidden;
+  }
+  
   body {
     @apply font-poppins antialiased bg-white;
+  }
+  
+  * {
+    @apply font-poppins;
   }
 }
 
@@ -12,19 +27,38 @@
   .container {
     @apply max-w-7xl mx-auto;
   }
+  
+  .input-group {
+    @apply mb-5;
+  }
+  
+  .input-group label {
+    @apply block text-xs mb-1;
+  }
+  
+  .input-group input,
+  .input-group textarea {
+    @apply px-4 py-2.5 bg-gray-100 w-full focus:border focus:border-gray-400 outline-none text-sm;
+  }
 }
 
 @layer utilities {
   .text-primary {
-    color: #f97316;
+    color: var(--primary);
   }
   .bg-primary {
-    background-color: #f97316;
+    background-color: var(--primary);
   }
   .bg-primary-light {
-    background-color: #fff7ed;
+    background-color: var(--primary-light);
   }
   .border-primary {
-    border-color: #f97316;
+    border-color: var(--primary);
+  }
+  .bg-dark {
+    background-color: var(--dark);
+  }
+  .bg-dark-alternate {
+    background-color: var(--dark-alternate);
   }
 }

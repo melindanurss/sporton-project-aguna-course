@@ -644,12 +644,20 @@ video {
 [hidden]:where(:not([hidden="until-found"])) {
   display: none;
 }
+  html {
+    overflow-x: hidden;
+  }
+  
   body {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
   font-family: Poppins, system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+  
+  * {
+  font-family: Poppins, system-ui, sans-serif;
 }
 .container {
   width: 100%;
@@ -816,14 +824,8 @@ video {
 .mt-10 {
   margin-top: 2.5rem;
 }
-.mt-12 {
-  margin-top: 3rem;
-}
 .mt-14 {
   margin-top: 3.5rem;
-}
-.mt-16 {
-  margin-top: 4rem;
 }
 .mt-2 {
   margin-top: 0.5rem;
@@ -836,9 +838,6 @@ video {
 }
 .mt-5 {
   margin-top: 1.25rem;
-}
-.mt-52 {
-  margin-top: 13rem;
 }
 .mt-8 {
   margin-top: 2rem;
@@ -1551,17 +1550,30 @@ video {
   transition-duration: 300ms;
 }
 .text-primary {
-    color: #f97316;
+    color: var(--primary);
   }
 .bg-primary {
-    background-color: #f97316;
+    background-color: var(--primary);
   }
 .bg-primary-light {
-    background-color: #fff7ed;
+    background-color: var(--primary-light);
   }
 .border-primary {
-    border-color: #f97316;
+    border-color: var(--primary);
   }
+.bg-dark {
+    background-color: var(--dark);
+  }
+.bg-dark-alternate {
+    background-color: var(--dark-alternate);
+  }
+
+:root {
+  --dark: #111111;
+  --dark-alternate: #1b1918;
+  --primary: #ff5f3f;
+  --primary-light: #f4ebeb;
+}
 
 .after\:absolute::after {
   content: var(--tw-content);
@@ -1629,7 +1641,7 @@ video {
 
 .after\:bg-primary::after {
     content: var(--tw-content);
-    background-color: #f97316;
+    background-color: var(--primary);
   }
 
 .hover\:translate-x-1:hover {
@@ -1709,15 +1721,15 @@ video {
 }
 
 .hover\:text-primary:hover {
-    color: #f97316;
+    color: var(--primary);
   }
 
 .hover\:bg-primary:hover {
-    background-color: #f97316;
+    background-color: var(--primary);
   }
 
 .hover\:border-primary:hover {
-    border-color: #f97316;
+    border-color: var(--primary);
   }
 
 .hover\:after\:w-1\/2:hover::after {
@@ -1736,7 +1748,7 @@ video {
 }
 
 .focus\:border-primary:focus {
-    border-color: #f97316;
+    border-color: var(--primary);
   }
 
 .active\:scale-95:active {

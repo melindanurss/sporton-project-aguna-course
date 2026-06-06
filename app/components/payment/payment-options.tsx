@@ -4,17 +4,22 @@ import CardWithHeader from "../ui/card-with-header";
 const paymentList = [
   {
     bank_name: "BCA",
-    account_number: 1231231231231,
+    account_number: "1234567890",
     account_holder: "PT SportsOn Digital",
   },
   {
     bank_name: "Mandiri",
-    account_number: 89458434,
+    account_number: "987654321012",
     account_holder: "PT SportsOn Digital",
   },
   {
-    bank_name: "BRI",
-    account_number: 123891283912,
+    bank_name: "BNI",
+    account_number: "112233445566",
+    account_holder: "PT SportsOn Digital",
+  },
+  {
+    bank_name: "BTN",
+    account_number: "334455667788",
     account_holder: "PT SportsOn Digital",
   },
 ];
