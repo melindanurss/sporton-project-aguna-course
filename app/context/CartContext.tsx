@@ -31,7 +31,6 @@ export const useCart = () => {
   return context;
 };
 
-// DATA AWAL UNTUK CART (SEEDER)
 const initialCart: CartItem[] = [
   {
     id: 3,
@@ -60,7 +59,6 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     if (savedCart) {
       setCart(JSON.parse(savedCart));
     } else {
-      // Jika tidak ada data di localStorage, gunakan data awal
       setCart(initialCart);
     }
     setIsLoaded(true);
@@ -90,12 +88,18 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateQuantity = (id: number, qty: number) => {
-    if (qty <= 0) {
-      removeFromCart(id);
+    if (qty < 1) {
+      setCart((prevCart) =>
+        prevCart.map((item) =>
+          item.id === id ? { ...item, qty: 1 } : item
+        )
+      );
       return;
     }
     setCart((prevCart) =>
-      prevCart.map((item) => (item.id === id ? { ...item, qty } : item))
+      prevCart.map((item) =>
+        item.id === id ? { ...item, qty } : item
+      )
     );
   };
 
