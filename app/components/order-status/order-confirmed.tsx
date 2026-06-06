@@ -17,13 +17,13 @@ const OrderConfirmed = () => {
         alt="order confirmed"
         className="mb-6"
       />
-      <h2 className="text-3xl font-bold text-green-600 mb-3">Order Confirmed!!</h2>
+      <h2 className="text-2xl font-semibold mb-2">Order Confirmed!</h2>
       <p className="text-gray-600 mb-8 leading-relaxed">
         We have received your payment, and your order is currently processed by
         our staff. Just wait until your favorite sportswear arrives at your home.
         We will contact you on WhatsApp for further shipping updates.
       </p>
-      <Button variant="primary" onClick={() => push("/")}>
+      <Button variant="dark" className="w-full" onClick={() => push("/")}>
         <FiHome />
         Back to Home
       </Button>
