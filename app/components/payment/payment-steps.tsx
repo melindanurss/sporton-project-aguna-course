@@ -23,7 +23,7 @@ const PaymentSteps = () => {
   }, []);
 
   const uploadAndConfirm = () => {
-    push("/order-status");
+    push("/order-status/submitted");
   };
 
   return (

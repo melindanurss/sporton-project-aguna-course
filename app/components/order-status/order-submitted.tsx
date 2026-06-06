@@ -9,7 +9,7 @@ const OrderSubmitted = () => {
   const { push } = useRouter();
 
   const refreshOrderStatus = () => {
-    push("/order-status?status=confirmed");
+    push("/order-status/confirmed");
   };
 
   return (

@@ -1,24 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import OrderConfirmed from "../../components/order-status/order-confirmed";
 import OrderSubmitted from "../../components/order-status/order-submitted";
-import { Suspense } from "react";
 
-function OrderStatusContent() {
-  const searchParams = useSearchParams();
-  const [isConfirmed, setIsConfirmed] = useState(false);
-
-  useEffect(() => {
-    const status = searchParams.get("status");
-    if (status === "confirmed") {
-      setIsConfirmed(true);
-      // Clear cart after order confirmed
-      localStorage.removeItem("sporton-cart");
-      localStorage.removeItem("sporton-order-data");
-    }
-  }, [searchParams]);
+export default function OrderStatusDetail() {
+  const { id } = useParams();
+  
+  const isConfirmed = id === "confirmed";
 
   return (
     <main className="bg-gray-100 min-h-[80vh]">
@@ -31,13 +20,3 @@ function OrderStatusContent() {
     </main>
   );
 }
-
-const OrderStatus = () => {
-  return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <OrderStatusContent />
-    </Suspense>
-  );
-};
-
-export default OrderStatus;

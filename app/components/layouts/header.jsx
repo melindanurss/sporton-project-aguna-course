@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { FiSearch, FiShoppingBag, FiX } from "react-icons/fi";
 import { useCart } from "../../context/CartContext";
 import CartPopup from "../ui/cart-popup";
@@ -80,7 +81,7 @@ const Header = () => {
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="flex justify-between items-center container mx-auto py-5 px-4">
         {/* Logo */}
-        <div className="relative w-[127px] h-[30px] cursor-pointer" onClick={() => scrollToSection("hero-section")}>
+        <Link href="/" className="relative w-[127px] h-[30px] cursor-pointer block">
           <Image
             src="/images/logo.svg"
             alt="sporton logo"
@@ -88,7 +89,7 @@ const Header = () => {
             className="object-contain"
             priority
           />
-        </div>
+        </Link>
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center gap-24">
