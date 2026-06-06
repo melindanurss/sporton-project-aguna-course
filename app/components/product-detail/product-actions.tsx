@@ -20,11 +20,7 @@ type TProduct = {
   description: string;
 };
 
-const ProductActions = ({
-  product,
-}: {
-  product?: TProduct;
-}) => {
+const ProductActions = ({ product }: { product?: TProduct }) => {
   const { push } = useRouter();
   const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
@@ -33,9 +29,39 @@ const ProductActions = ({
 
   const handleAddToCart = () => {
     if (product) {
-      addToCart(product, qty);
+      // Konversi TProduct ke format yang sesuai dengan CartItem
+      addToCart(
+        {
+          id: product.id,
+          name: product.name,
+          category: product.category,
+          price: product.price,
+          imgUrl: product.imgUrl,
+          qty: qty,
+        },
+        qty
+      );
       setAdded(true);
       setTimeout(() => setAdded(false), 1500);
+    }
+  };
+
+  const handleCheckoutNow = () => {
+    if (product) {
+      // Konversi TProduct ke format yang sesuai dengan CartItem
+      addToCart(
+        {
+          id: product.id,
+          name: product.name,
+          category: product.category,
+          price: product.price,
+          imgUrl: product.imgUrl,
+          qty: qty,
+        },
+        qty
+      );
+      // Langsung redirect ke halaman checkout
+      push("/checkout");
     }
   };
 
@@ -55,7 +81,7 @@ const ProductActions = ({
           </button>
           <button
             className="w-8 h-6 flex items-center justify-center hover:bg-gray-100 transition-colors"
-            onClick={() => setQty(qty > 1 ? qty - 1 : qty)}
+            onClick={() => setQty(qty > 1 ? qty - 1 : 1)}
           >
             <FiChevronDown size={14} />
           </button>
@@ -80,7 +106,7 @@ const ProductActions = ({
 
       {/* Checkout Now Button */}
       <button
-        onClick={() => push("/checkout")}
+        onClick={handleCheckoutNow}
         onMouseEnter={() => setIsHoveringCheckout(true)}
         onMouseLeave={() => setIsHoveringCheckout(false)}
         className="
