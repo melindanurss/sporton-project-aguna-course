@@ -18,7 +18,9 @@ interface CartStore {
   setCustomerInfo: (info: CustomerInfo) => void;
   addItem: (product: Product, qty?: number) => void;
   removeItem: (productId: string) => void;
+  updateQuantity: (productId: string, qty: number) => void;
   reset: () => void;
+  getCartTotal: () => number;
 }
 
 export const useCartStore = create<CartStore>()(
@@ -40,18 +42,25 @@ export const useCartStore = create<CartStore>()(
             ),
           });
         } else {
-          const newItem = { 
-            ...product, 
-            qty,
-          };
-          set({ items: [...items, newItem] });
+          set({ items: [...items, { ...product, qty }] });
         }
       },
       removeItem: (productId) => {
         set({ items: get().items.filter((item) => item._id !== productId) });
       },
+      updateQuantity: (productId, qty) => {
+        if (qty < 1) return;
+        set({
+          items: get().items.map((item) =>
+            item._id === productId ? { ...item, qty } : item
+          ),
+        });
+      },
       reset: () => {
         set({ items: [], customerInfo: null });
+      },
+      getCartTotal: () => {
+        return get().items.reduce((total, item) => total + item.price * item.qty, 0);
       },
     }),
     {

@@ -5,30 +5,33 @@ import Button from "../ui/button";
 import { FiCreditCard, FiTrash2, FiPlus, FiMinus } from "react-icons/fi";
 import CardWithHeader from "../ui/card-with-header";
 import { useRouter } from "next/navigation";
-import { useCart } from "../../context/CartContext";
+import { useCartStore } from "@/app/hooks/use-cart-store";
+import { getImageUrl } from "@/app/lib/api";
 import { OrderFormData } from "./order-information";
+
+type TCartItemsProps = {
+  isFormValid?: boolean;
+  orderData?: OrderFormData | null;
+  onProceedToPayment?: () => void;
+  isLoading?: boolean;
+};
 
 const CartItems = ({ 
   isFormValid = false,
-  orderData = null 
-}: { 
-  isFormValid?: boolean;
-  orderData?: OrderFormData | null;
-}) => {
+  orderData = null,
+  onProceedToPayment,
+  isLoading = false
+}: TCartItemsProps) => {
   const { push } = useRouter();
-  const { cart, removeFromCart, updateQuantity, getCartTotal } = useCart();
-  const totalPrice = getCartTotal();
+  const { items, removeItem, updateQuantity } = useCartStore();
+  const totalPrice = items.reduce((total, item) => total + item.price * item.qty, 0);
 
-  const handleProceedToPayment = () => {
-    if (isFormValid && orderData) {
-      // Simpan data order ke localStorage
-      localStorage.setItem("sporton-order-data", JSON.stringify(orderData));
-      localStorage.setItem("sporton-cart-data", JSON.stringify(cart));
-      push("/payment");
-    }
+  const handleUpdateQuantity = (id: string, qty: number) => {
+    if (qty < 1) return;
+    updateQuantity(id, qty);
   };
 
-  if (cart.length === 0) {
+  if (items.length === 0) {
     return (
       <CardWithHeader title="Cart Items">
         <div className="p-8 text-center text-gray-500">
@@ -44,11 +47,11 @@ const CartItems = ({
   return (
     <CardWithHeader title="Cart Items">
       <div className="overflow-auto max-h-[400px]">
-        {cart.map((item) => (
-          <div className="border-b border-gray-200 p-4 flex gap-3 items-center" key={item.id}>
+        {items.map((item) => (
+          <div className="border-b border-gray-200 p-4 flex gap-3 items-center" key={item._id}>
             <div className="bg-primary-light aspect-square w-16 flex justify-center items-center rounded-lg">
               <Image
-                src={`/images/${item.imgUrl}`}
+                src={getImageUrl(item.imageUrl)}
                 width={63}
                 height={63}
                 alt={item.name}
@@ -60,14 +63,14 @@ const CartItems = ({
               <div className="text-primary text-sm font-semibold">{priceFormatter(item.price)}</div>
               <div className="flex items-center gap-2 mt-2">
                 <button
-                  onClick={() => updateQuantity(item.id, item.qty - 1)}
+                  onClick={() => handleUpdateQuantity(item._id, item.qty - 1)}
                   className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-100 transition-colors"
                 >
                   <FiMinus size={12} />
                 </button>
                 <span className="text-sm font-medium w-8 text-center">{item.qty}</span>
                 <button
-                  onClick={() => updateQuantity(item.id, item.qty + 1)}
+                  onClick={() => handleUpdateQuantity(item._id, item.qty + 1)}
                   className="w-7 h-7 flex items-center justify-center border border-gray-300 rounded hover:bg-gray-100 transition-colors"
                 >
                   <FiPlus size={12} />
@@ -77,7 +80,7 @@ const CartItems = ({
             <div className="text-right">
               <div className="font-semibold">{priceFormatter(item.price * item.qty)}</div>
               <button
-                onClick={() => removeFromCart(item.id)}
+                onClick={() => removeItem(item._id)}
                 className="text-red-500 hover:text-red-700 transition-colors mt-2 flex items-center justify-end w-full"
                 aria-label="Remove item"
               >
@@ -96,11 +99,11 @@ const CartItems = ({
         <Button
           variant="dark"
           className={`w-full transition-all duration-300 ${!isFormValid ? "opacity-50 cursor-not-allowed" : "hover:scale-105"}`}
-          onClick={handleProceedToPayment}
-          disabled={!isFormValid}
+          onClick={onProceedToPayment}
+          disabled={!isFormValid || isLoading}
         >
           <FiCreditCard size={18} />
-          Proceed to Payment
+          {isLoading ? "Processing..." : "Proceed to Payment"}
         </Button>
         {!isFormValid && (
           <p className="text-xs text-red-500 text-center mt-2">
