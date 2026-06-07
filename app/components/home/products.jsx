@@ -2,13 +2,13 @@
 import Link from "next/link";
 import Button from "../ui/button";
 import { FiPlus, FiCheck } from "react-icons/fi";
-import { useCart } from "../../context/CartContext";
-import { useState, useEffect } from "react";
+import { useCartStore } from "@/app/hooks/use-cart-store";
+import { useState } from "react";
 import { getImageUrl } from "@/app/lib/api";
 import priceFormatter from "@/app/utils/price-formatter";
 
 const ProductsSection = ({ products }) => {
-  const { addToCart } = useCart();
+  const { addItem } = useCartStore();
   const [addedProducts, setAddedProducts] = useState({});
 
   const targetProducts = [
@@ -31,7 +31,11 @@ const ProductsSection = ({ products }) => {
     e.preventDefault(); 
     e.stopPropagation(); 
     
-    addToCart(product, 1);
+    const productToAdd = {
+      ...product,
+      imageUrl: product.imageUrl || product.imgUrl || "",
+    };
+    addItem(productToAdd, 1);
     
     setAddedProducts(prev => ({ ...prev, [product._id]: true }));
     

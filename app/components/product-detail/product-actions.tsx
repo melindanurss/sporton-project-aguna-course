@@ -9,11 +9,11 @@ import {
 } from "react-icons/fi";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCart } from "../../context/CartContext";
+import { useCartStore } from "@/app/hooks/use-cart-store";
 
 const ProductActions = ({ product, stock = 0 }) => {
+  const { addItem } = useCartStore();
   const { push } = useRouter();
-  const { addToCart } = useCart();
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const [isHoveringCheckout, setIsHoveringCheckout] = useState(false);
@@ -22,22 +22,11 @@ const ProductActions = ({ product, stock = 0 }) => {
 
   const handleAddToCart = () => {
     if (product && !isOutOfStock) {
-      const productId = product._id || product.id;
-      const productCategory = typeof product.category === 'string' 
-        ? product.category 
-        : product.category?.name || "";
-      
-      addToCart(
-        {
-          id: productId,
-          name: product.name,
-          category: productCategory,
-          price: product.price,
-          imgUrl: product.imageUrl || product.imgUrl || "",
-          qty: qty,
-        },
-        qty
-      );
+      const productToAdd = {
+        ...product,
+        imageUrl: product.imageUrl || product.imgUrl || "",
+      };
+      addItem(productToAdd, qty);
       setAdded(true);
       setTimeout(() => setAdded(false), 1500);
     }
@@ -45,22 +34,11 @@ const ProductActions = ({ product, stock = 0 }) => {
 
   const handleCheckoutNow = () => {
     if (product && !isOutOfStock) {
-      const productId = product._id || product.id;
-      const productCategory = typeof product.category === 'string' 
-        ? product.category 
-        : product.category?.name || "";
-      
-      addToCart(
-        {
-          id: productId,
-          name: product.name,
-          category: productCategory,
-          price: product.price,
-          imgUrl: product.imageUrl || product.imgUrl || "",
-          qty: qty,
-        },
-        qty
-      );
+      const productToAdd = {
+        ...product,
+        imageUrl: product.imageUrl || product.imgUrl || "",
+      };
+      addItem(productToAdd, qty);
       push("/checkout");
     }
   };

@@ -40,7 +40,11 @@ export const useCartStore = create<CartStore>()(
             ),
           });
         } else {
-          set({ items: [...items, { ...product, qty }] });
+          const newItem = { 
+            ...product, 
+            qty,
+          };
+          set({ items: [...items, newItem] });
         }
       },
       removeItem: (productId) => {

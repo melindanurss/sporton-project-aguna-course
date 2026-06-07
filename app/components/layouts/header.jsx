@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { FiSearch, FiShoppingBag, FiX } from "react-icons/fi";
-import { useCart } from "../../context/CartContext";
+import { useCartStore } from "@/app/hooks/use-cart-store";
 import CartPopup from "../ui/cart-popup";
 
 const Header = () => {
@@ -11,10 +11,9 @@ const Header = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const { getCartCount } = useCart();
-  const cartCount = getCartCount();
+  const { items } = useCartStore();
+  const cartCount = items.reduce((total, item) => total + item.qty, 0);
 
-  // Close cart when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       const target = event.target;
@@ -80,7 +79,6 @@ const Header = () => {
   return (
     <header className="sticky top-0 z-50 bg-white shadow-sm">
       <div className="flex justify-between items-center container mx-auto py-5 px-4">
-        {/* Logo */}
         <Link href="/" className="relative w-[127px] h-[30px] cursor-pointer block">
           <Image
             src="/images/logo.svg"
@@ -91,7 +89,6 @@ const Header = () => {
           />
         </Link>
 
-        {/* Navigation */}
         <nav className="hidden md:flex items-center gap-24">
           <button
             onClick={() => scrollToSection("hero-section")}
@@ -125,7 +122,6 @@ const Header = () => {
           </button>
         </nav>
 
-        {/* Icons */}
         <div className="flex items-center gap-10">
           <FiSearch 
             size={22} 
@@ -146,14 +142,12 @@ const Header = () => {
         </div>
       </div>
 
-      {/* Cart Popup */}
       {isCartOpen && (
         <div className="absolute right-4 top-full mt-2 cart-popup">
           <CartPopup onClose={() => setIsCartOpen(false)} />
         </div>
       )}
 
-      {/* Search Modal */}
       {isSearchOpen && (
         <div className="fixed inset-0 bg-black/50 z-50 flex items-start justify-center pt-20">
           <div className="bg-white rounded-2xl w-full max-w-2xl mx-4 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-300">

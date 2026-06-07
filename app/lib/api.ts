@@ -29,5 +29,8 @@ export function getImageUrl(path: string) {
   if (path.startsWith("http")) return path;
   if (path.startsWith("/images/")) return path;
   if (path.startsWith("category-")) return `/images/${path}`;
+  if (path.startsWith("uploads/")) {
+    return `${process.env.NEXT_PUBLIC_API_ROOT}/${path}`;
+  }
   return `${process.env.NEXT_PUBLIC_API_ROOT}/${path}`;
 }
