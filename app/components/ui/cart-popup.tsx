@@ -23,6 +23,16 @@ const CartPopup = ({ onClose }: { onClose?: () => void }) => {
     onClose?.();
   };
 
+  const handleContinueShopping = () => {
+    onClose?.();
+    const productsSection = document.getElementById("products-section");
+    if (productsSection) {
+      productsSection.scrollIntoView({ behavior: "smooth" });
+    } else {
+      push("/");
+    }
+  };
+
   const handleImageError = (productId: string) => {
     setImageErrors(prev => ({ ...prev, [productId]: true }));
   };
@@ -36,7 +46,9 @@ const CartPopup = ({ onClose }: { onClose?: () => void }) => {
         </div>
         <div className="p-8 text-center text-gray-500">
           <p>Your cart is empty</p>
-          <Button variant="primary" className="mt-4" onClick={onClose}>Continue Shopping</Button>
+          <Button variant="primary" className="mt-4" onClick={handleContinueShopping}>
+            Continue Shopping
+          </Button>
         </div>
       </div>
     );

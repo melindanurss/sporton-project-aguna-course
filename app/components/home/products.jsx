@@ -16,7 +16,10 @@ const ProductsSection = ({ products }) => {
     { name: "SportOn FootFastball V3", category: "Football", price: 599000 },
     { name: "SportOn Hypershirt Black", category: "Running", price: 330000 },
     { name: "SportOn AirFlow Shirt", category: "Running", price: 230000 },
-    { name: "Raket Green Tennis", category: "Tennis", price: 300000 }
+    { name: "Raket Green Tennis", category: "Tennis", price: 300000 },
+    { name: "baju bola ijo", price: 300000 },
+    { name: "Testing", price: 5000 },
+    { name: "Tennis Racket testing", price: 200000 },
   ];
 
   const filteredProducts = products?.filter(product => 

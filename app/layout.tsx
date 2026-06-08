@@ -3,7 +3,6 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Header from "./components/layouts/header";
 import Footer from "./components/layouts/footer";
-import { CartProvider } from "./context/CartContext"; // Pastikan impor ini ada
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -25,11 +24,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${poppins.variable} antialiased`}>
-        <CartProvider> {/* <-- INI KUNCINYA! */}
-          <Header />
-          {children}
-          <Footer />
-        </CartProvider>
+        <Header />
+        {children}
+        <Footer />
       </body>
     </html>
   );

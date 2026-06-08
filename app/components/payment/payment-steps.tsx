@@ -6,24 +6,66 @@ import FileUpload from "../ui/file-upload";
 import priceFormatter from "@/app/utils/price-formatter";
 import Button from "../ui/button";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useCartStore } from "@/app/hooks/use-cart-store";
+import { transactionCheckout } from "@/app/services/transaction.service";
 
 const PaymentSteps = () => {
   const { push } = useRouter();
-  const [totalAmount, setTotalAmount] = useState(0);
+  const { items, customerInfo, reset } = useCartStore();
+  const [file, setFile] = useState<File | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    // Ambil data cart dari localStorage
-    const savedCart = localStorage.getItem("sporton-cart");
-    if (savedCart) {
-      const cart = JSON.parse(savedCart);
-      const total = cart.reduce((sum: number, item: any) => sum + (item.price * item.qty), 0);
-      setTotalAmount(total);
+  const totalPrice = items.reduce(
+    (total, item) => total + item.price * item.qty,
+    0
+  );
+
+  const handleConfirmPayment = async () => {
+    if (!file) {
+      alert("Please upload your payment receipt!");
+      return;
     }
-  }, []);
 
-  const uploadAndConfirm = () => {
-    push("/order-status/submitted");
+    if (!customerInfo) {
+      alert("Customer information is missing, please return to checkout");
+      push("/checkout");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const formData = new FormData();
+      formData.append("customerName", customerInfo.customerName);
+      formData.append(
+        "customerContact",
+        customerInfo.customerContact!.toString()
+      );
+      formData.append("customerAddress", customerInfo.customerAddress);
+      formData.append("image", file);
+      
+      // Filter items yang memiliki _id (productId)
+      const validItems = items
+        .filter(item => item._id)
+        .map((item) => ({ productId: item._id, qty: item.qty }));
+      
+      console.log("Valid items being sent:", validItems);
+      
+      formData.append("purchasedItems", JSON.stringify(validItems));
+      formData.append("totalPayment", totalPrice.toString());
+
+      const res = await transactionCheckout(formData);
+
+      alert("Transaction created successfully!");
+      reset();
+      push(`/order-status/${res._id}`);
+    } catch (error) {
+      console.error("Payment error:", error);
+      alert("Failed to confirm payment. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -31,7 +73,7 @@ const PaymentSteps = () => {
       <div className="p-5">
         <ol className="list-decimal pl-5 space-y-4 text-sm">
           <li>
-            Transfer the total amount of <b>{priceFormatter(totalAmount)}</b> to your preferred
+            Transfer the total amount of <b>{priceFormatter(totalPrice)}</b> to your preferred
             bank account listed under 'Payment Options' (BCA, Mandiri, or BRI).
           </li>
           <li>
@@ -46,7 +88,7 @@ const PaymentSteps = () => {
           </li>
         </ol>
         <div className="mt-5">
-          <FileUpload />
+          <FileUpload onFileSelect={setFile} />
         </div>
       </div>
 
@@ -54,16 +96,17 @@ const PaymentSteps = () => {
         <div className="flex justify-between font-semibold mb-4">
           <div className="text-sm">Total</div>
           <div className="text-primary font-bold">
-            {priceFormatter(totalAmount)}
+            {priceFormatter(totalPrice)}
           </div>
         </div>
         <Button
           variant="dark"
           className="w-full"
-          onClick={uploadAndConfirm}
+          onClick={handleConfirmPayment}
+          disabled={isLoading}
         >
           <FiCheckCircle />
-          Upload Receipt & Confirm
+          {isLoading ? "Processing..." : "Upload Receipt & Confirm"}
         </Button>
       </div>
     </CardWithHeader>

@@ -4,11 +4,10 @@ import OrderInformation, { OrderFormData } from "../components/checkout/order-in
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCartStore } from "@/app/hooks/use-cart-store";
-import { transactionCheckout } from "@/app/services/transaction.service";
 
 const Checkout = () => {
   const { push } = useRouter();
-  const { items, reset, setCustomerInfo } = useCartStore();
+  const { setCustomerInfo } = useCartStore();
   const [isFormValid, setIsFormValid] = useState(false);
   const [orderData, setOrderData] = useState<OrderFormData | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -16,47 +15,25 @@ const Checkout = () => {
   const handleFormChange = (isValid: boolean, data: OrderFormData) => {
     setIsFormValid(isValid);
     setOrderData(data);
-    
-    if (isValid && data) {
-      setCustomerInfo({
-        customerName: data.fullName,
-        customerContact: parseInt(data.waNumber) || null,
-        customerAddress: data.address,
-      });
-    }
   };
 
-  const handleProceedToPayment = async () => {
-    if (!isFormValid || !orderData || items.length === 0) return;
+  const handleProceedToPayment = () => {
+    if (!isFormValid || !orderData) return;
     
     setIsLoading(true);
     
-    try {
-      const formData = new FormData();
-      formData.append("customerName", orderData.fullName);
-      formData.append("customerContact", orderData.waNumber);
-      formData.append("customerAddress", orderData.address);
-      
-      items.forEach((item, index) => {
-        formData.append(`items[${index}][productId]`, item._id);
-        formData.append(`items[${index}][qty]`, item.qty.toString());
-      });
-      
-      const transaction = await transactionCheckout(formData);
-      console.log("Transaction created:", transaction);
-      
-      localStorage.setItem("sporton-order-data", JSON.stringify(orderData));
-      localStorage.setItem("sporton-cart-data", JSON.stringify(items));
-      localStorage.setItem("sporton-transaction-id", transaction._id);
-      
-      reset();
-      push("/payment");
-    } catch (error) {
-      console.error("Checkout error:", error);
-      alert("Gagal memproses checkout. Silakan coba lagi.");
-    } finally {
-      setIsLoading(false);
-    }
+    // Simpan data customer ke store
+    setCustomerInfo({
+      customerName: orderData.fullName,
+      customerContact: parseInt(orderData.waNumber) || null,
+      customerAddress: orderData.address,
+    });
+    
+    // Simpan ke localStorage untuk backup
+    localStorage.setItem("sporton-order-data", JSON.stringify(orderData));
+    
+    setIsLoading(false);
+    push("/payment");
   };
 
   return (
