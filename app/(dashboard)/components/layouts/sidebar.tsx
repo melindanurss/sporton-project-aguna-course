@@ -10,6 +10,7 @@ import {
   FiLogOut,
   FiShoppingCart,
 } from "react-icons/fi";
+import Swal from "sweetalert2";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -22,8 +23,30 @@ const Sidebar = () => {
     { name: "Bank Information", icon: FiCreditCard, link: "/admin/bank-info" },
   ];
 
-  const handleLogout = () => {
-    router.push("/admin/login");
+  const handleLogout = async () => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You will be logged out of the admin dashboard.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ff5f3f",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Yes, Logout",
+      cancelButtonText: "Cancel",
+    });
+
+    if (result.isConfirmed) {
+      await Swal.fire({
+        icon: "success",
+        title: "Logged Out!",
+        text: "You have been successfully logged out.",
+        timer: 1500,
+        showConfirmButton: false,
+        background: "#fff",
+        iconColor: "#22c55e",
+      });
+      router.push("/admin/login");
+    }
   };
 
   return (

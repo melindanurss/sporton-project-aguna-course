@@ -18,7 +18,7 @@ const ProductManagement = () => {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="font-bold text-3xl text-gray-800">Product Management</h1>
-          <p className="text-gray-500 text-sm mt-1">Manage your inventory, prices and stock.</p>
+          <p className="text-gray-500 text-sm mt-1">Manage your inventory, prices, and stock.</p>
         </div>
         <Button variant="primary" className="rounded-lg flex items-center gap-2" onClick={() => setIsOpen(true)}>
           <FiPlus size={20} />
