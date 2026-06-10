@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { useRef } from "react";
 import { FiEdit, FiUploadCloud } from "react-icons/fi";
@@ -29,30 +31,36 @@ const ImageUploadPreview = ({
   };
 
   return (
-    <div className={className}>
+    <div className={`flex flex-col ${className || ""}`}>
+      {label && (
+        <label className="block text-sm font-bold text-gray-800 mb-1">
+          {label}
+        </label>
+      )}
       <div
         onClick={handleImageClick}
-        className="border-2 border-dashed border-primary bg-primary/5 rounded-lg h-50 flex flex-col justify-center items-center"
+        className="border-2 border-dashed border-primary bg-primary/5 rounded-lg flex-1 flex flex-col justify-center items-center cursor-pointer hover:bg-primary/10 transition-all min-h-[200px]"
       >
         {value ? (
-          <div className="max-w-[190px] relative">
+          <div className="relative w-full h-full flex items-center justify-center p-4">
             <Image
               src={value}
               alt="preview product"
-              className="w-full h-full object-cover"
-              width={190}
-              height={190}
+              className="max-w-full max-h-full object-contain"
+              width={150}
+              height={150}
             />
-            <div className="opacity-0 hover:opacity-100 absolute top-0 left-0 flex z-50">
-              <FiEdit />
-              Change Image
+            <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center rounded-lg">
+              <span className="text-white text-sm flex items-center gap-1">
+                <FiEdit size={16} /> Change
+              </span>
             </div>
           </div>
         ) : (
-          <>
-            <FiUploadCloud className="text-primary" size={24} />
-            <span className="text-sm font-medium">Click to Upload</span>
-          </>
+          <div className="text-center p-4">
+            <FiUploadCloud className="text-primary mx-auto mb-2" size={32} />
+            <span className="text-sm text-gray-500">Click to Upload</span>
+          </div>
         )}
         <input
           type="file"
