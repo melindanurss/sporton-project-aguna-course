@@ -1,8 +1,8 @@
-// File: D:\PROJECT_AGUNA-COURSE\sporton-project-aguna-course\app\(dashboard)\admin\categories\page.tsx
-import * as entry from '../../../../../../app/(dashboard)/admin/categories/page.js'
+// File: D:\PROJECT_AGUNA-COURSE\sporton-project-aguna-course\app\(website)\page.tsx
+import * as entry from '../../../../app/(website)/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../../../../app/(dashboard)/admin/categories/page.js')
+type TEntry = typeof import('../../../../app/(website)/page.js')
 
 // Check that the entry is a valid entry
 checkFields<Diff<{
