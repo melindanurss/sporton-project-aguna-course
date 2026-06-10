@@ -1,9 +1,9 @@
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import ProductActions from "../../components/product-detail/product-actions";
-import { getProductDetail } from "@/app/services/product.service";
-import { getImageUrl } from "@/app/lib/api";
-import priceFormatter from "@/app/utils/price-formatter";
+import { getProductDetail } from "../../../services/product.service";
+import { getImageUrl } from "../../../lib/api";
+import priceFormatter from "../../../utils/price-formatter";
 
 export type TPageProps = {
   params: Promise<{ id: string }>;
@@ -25,7 +25,6 @@ const ProductDetailPage = async ({ params }: TPageProps) => {
     notFound();
   }
 
-  // Konversi data API ke format yang sesuai dengan tampilan lama
   const displayProduct = {
     id: product._id,
     name: product.name,
@@ -38,7 +37,6 @@ const ProductDetailPage = async ({ params }: TPageProps) => {
   return (
     <div className="container mx-auto py-16">
       <div className="flex gap-12">
-        {/* Image Section - TAMPILAN LAMA */}
         <div className="bg-primary-light aspect-square min-w-140 flex justify-center items-center overflow-hidden rounded-2xl">
           <Image
             src={getImageUrl(product.imageUrl)}
@@ -48,8 +46,6 @@ const ProductDetailPage = async ({ params }: TPageProps) => {
             className="w-full h-full object-contain"
           />
         </div>
-
-        {/* Product Info Section - TAMPILAN LAMA */}
         <div className="w-full py-4">
           <h1 className="font-bold text-5xl mb-4">{product.name}</h1>
           <div className="bg-primary-light rounded-full text-primary py-2 px-6 w-fit mb-5">

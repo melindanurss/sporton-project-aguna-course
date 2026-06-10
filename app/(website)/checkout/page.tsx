@@ -1,9 +1,10 @@
 "use client";
+
 import CartItems from "../components/checkout/cart-items";
 import OrderInformation, { OrderFormData } from "../components/checkout/order-information";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useCartStore } from "@/app/hooks/use-cart-store";
+import { useCartStore } from "../../hooks/use-cart-store";
 
 const Checkout = () => {
   const { push } = useRouter();
@@ -22,14 +23,12 @@ const Checkout = () => {
     
     setIsLoading(true);
     
-    // Simpan data customer ke store
     setCustomerInfo({
       customerName: orderData.fullName,
       customerContact: parseInt(orderData.waNumber) || null,
       customerAddress: orderData.address,
     });
     
-    // Simpan ke localStorage untuk backup
     localStorage.setItem("sporton-order-data", JSON.stringify(orderData));
     
     setIsLoading(false);

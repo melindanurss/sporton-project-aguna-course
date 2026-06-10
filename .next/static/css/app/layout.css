@@ -847,9 +847,6 @@ video {
   margin-top: 1.25rem;
   margin-bottom: 1.25rem;
 }
-.-mt-5 {
-  margin-top: -1.25rem;
-}
 .mb-1 {
   margin-bottom: 0.25rem;
 }
@@ -891,6 +888,9 @@ video {
 }
 .mb-\[10px\] {
   margin-bottom: 10px;
+}
+.ml-1 {
+  margin-left: 0.25rem;
 }
 .ml-40 {
   margin-left: 10rem;
@@ -936,9 +936,6 @@ video {
 }
 .mt-auto {
   margin-top: auto;
-}
-.ml-1 {
-  margin-left: 0.25rem;
 }
 .block {
   display: block;
@@ -1591,6 +1588,9 @@ video {
 .pb-24 {
   padding-bottom: 6rem;
 }
+.pb-3 {
+  padding-bottom: 0.75rem;
+}
 .pl-5 {
   padding-left: 1.25rem;
 }
@@ -1599,9 +1599,6 @@ video {
 }
 .pt-20 {
   padding-top: 5rem;
-}
-.pb-3 {
-  padding-bottom: 0.75rem;
 }
 .text-left {
   text-align: left;
@@ -1759,14 +1756,6 @@ video {
   --tw-text-opacity: 1;
   color: rgb(202 138 4 / var(--tw-text-opacity, 1));
 }
-.text-red-700 {
-  --tw-text-opacity: 1;
-  color: rgb(185 28 28 / var(--tw-text-opacity, 1));
-}
-.text-yellow-700 {
-  --tw-text-opacity: 1;
-  color: rgb(161 98 7 / var(--tw-text-opacity, 1));
-}
 .antialiased {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -1825,13 +1814,13 @@ video {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
-.transition-transform {
-  transition-property: transform;
+.transition-shadow {
+  transition-property: box-shadow;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
-.transition-shadow {
-  transition-property: box-shadow;
+.transition-transform {
+  transition-property: transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
