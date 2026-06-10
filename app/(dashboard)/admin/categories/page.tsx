@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/app/components/ui/button";
+import Button from "@/app/(website)/components/ui/button";
 import { FiPlus } from "react-icons/fi";
 import CategoryTable from "../../components/categories/category-table";
 import CategorytModal from "../../components/categories/category-modal";

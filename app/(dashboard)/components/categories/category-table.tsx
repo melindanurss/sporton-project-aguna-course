@@ -1,65 +1,86 @@
-import priceFormatter from "@/app/utils/price-formatter";
+"use client";
+
 import Image from "next/image";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import React from "react";
 
 const categoryData = [
   {
+    id: 1,
     name: "Running",
-    imageUrl: "/images/categories/category-running.png",
-    description: "lorem ipsum ",
+    imageUrl: "/images/category-running.png",
+    description: "All Running Items, Shoes, Shirts",
   },
   {
+    id: 2,
     name: "Football",
-    imageUrl: "/images/categories/category-football.png",
-    description: "lorem ipsum ",
+    imageUrl: "/images/category-running.png",
+    description: "All Running Items, Shoes, Shirts",
   },
 ];
 
 const CategoryTable = () => {
-  return (
-    <div className="bg-white rounded-xl border border-gray-200">
-      <table className="w-full text-left border-collapse">
-        <thead>
-          <tr className="border-b border-gray-200">
-            <th className="px-6 py-4 font-semibold">Category Name</th>
-            <th className="px-6 py-4 font-semibold">Description</th>
-            <th className="px-6 py-4 font-semibold">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {categoryData.map((data, index) => (
-            <tr
-              key={index}
-              className="border-b border-gray-200 last:border-b-0"
-            >
-              <td className="px-6 py-4 font-medium">
-                <div className="flex gap-2 items-center">
-                  <div className="aspect-square bg-gray-100 rounded-md">
-                    <Image
-                      src={data.imageUrl}
-                      width={52}
-                      height={52}
-                      alt={data.name}
-                      className="aspect-square object-contain"
-                    />
-                  </div>
-                  <span>{data.name}</span>
-                </div>
-              </td>
-              <td className="px-6 py-4 font-medium">{data.description}</td>
-              <td className="px-6 py-7.5 flex items-center gap-3 text-gray-600">
-                <button>
-                  <FiEdit2 size={20} />
-                </button>
-                <button>
-                  <FiTrash2 size={20} />
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+  return React.createElement(
+    "div",
+    { className: "bg-white rounded-xl border border-gray-200 overflow-hidden" },
+    React.createElement(
+      "table",
+      { className: "w-full text-left border-collapse" },
+      React.createElement(
+        "thead",
+        { className: "bg-gray-50" },
+        React.createElement(
+          "tr",
+          { className: "border-b border-gray-200" },
+          React.createElement("th", { className: "px-6 py-4 font-semibold text-gray-800 text-sm" }, "Category Name"),
+          React.createElement("th", { className: "px-6 py-4 font-semibold text-gray-800 text-sm" }, "Description"),
+          React.createElement("th", { className: "px-6 py-4 font-semibold text-gray-800 text-sm" }, "Actions")
+        )
+      ),
+      React.createElement(
+        "tbody",
+        null,
+        categoryData.map((data) =>
+          React.createElement(
+            "tr",
+            { key: data.id, className: "border-b border-gray-100 hover:bg-gray-50 transition-colors" },
+            React.createElement(
+              "td",
+              { className: "px-6 py-4" },
+              React.createElement(
+                "div",
+                { className: "flex gap-3 items-center" },
+                React.createElement(
+                  "div",
+                  { className: "w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center overflow-hidden" },
+                  React.createElement(Image, { src: data.imageUrl, width: 40, height: 40, alt: data.name, className: "object-cover" })
+                ),
+                React.createElement("span", { className: "font-medium text-gray-800" }, data.name)
+              )
+            ),
+            React.createElement("td", { className: "px-6 py-4 font-medium text-gray-800" }, data.description),
+            React.createElement(
+              "td",
+              { className: "px-6 py-4" },
+              React.createElement(
+                "div",
+                { className: "flex items-center gap-3" },
+                React.createElement(
+                  "button",
+                  { className: "p-1 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors" },
+                  React.createElement(FiEdit2, { size: 18 })
+                ),
+                React.createElement(
+                  "button",
+                  { className: "p-1 text-red-500 hover:bg-red-50 rounded-lg transition-colors" },
+                  React.createElement(FiTrash2, { size: 18 })
+                )
+              )
+            )
+          )
+        )
+      )
+    )
   );
 };
 

@@ -40,6 +40,35 @@
   .input-group textarea {
     @apply px-4 py-2.5 bg-gray-100 w-full focus:border focus:border-gray-400 outline-none text-sm;
   }
+  
+  /* ========== ADMIN PANEL STYLES ========== */
+  .input-group-admin {
+    @apply flex flex-col gap-1;
+  }
+  
+  .input-group-admin label {
+    @apply block text-sm font-medium text-gray-700 mb-1;
+  }
+  
+  .input-group-admin input,
+  .input-group-admin select,
+  .input-group-admin textarea {
+    @apply w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all text-sm bg-white;
+  }
+  
+  .input-group-admin input::placeholder,
+  .input-group-admin textarea::placeholder {
+    @apply text-gray-400;
+  }
+  
+  .input-group-admin textarea {
+    @apply resize-none;
+  }
+  
+  /* Class untuk admin login card */
+  .max-w-136 {
+    max-width: 544px;
+  }
 }
 
 @layer utilities {

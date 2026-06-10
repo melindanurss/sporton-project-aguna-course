@@ -1,6 +1,6 @@
 "use client";
 
-import Button from "@/app/components/ui/button";
+import Button from "@/app/(website)/components/ui/button";
 import { FiPlus } from "react-icons/fi";
 import { useState } from "react";
 import BankInfoList from "../../components/bank-info/bank-info-list";
@@ -17,7 +17,7 @@ const BankInfoManagement = () => {
     <div>
       <div className="flex justify-between items-center mb-10">
         <div>
-          <h1 className="font-bold text-2xl">Bank Info Management</h1>
+          <h1 className="font-bold text-2xl">Bank Information</h1>
           <p className="opacity-50">
             Manage destination accounts for customer transfers.
           </p>

@@ -1,4 +1,4 @@
-import Button from "@/app/components/ui/button";
+import Button from "@/app/(website)/components/ui/button";
 import Modal from "../ui/modal";
 import ImageUploadPreview from "../ui/image-upload-preview";
 import { useState } from "react";
