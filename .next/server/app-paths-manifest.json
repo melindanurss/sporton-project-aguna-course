@@ -1,7 +1,8 @@
 {
-  "/(dashboard)/admin/transactions/page": "app/(dashboard)/admin/transactions/page.js",
-  "/(auth)/admin/login/page": "app/(auth)/admin/login/page.js",
-  "/(dashboard)/admin/categories/page": "app/(dashboard)/admin/categories/page.js",
-  "/(dashboard)/admin/products/page": "app/(dashboard)/admin/products/page.js",
-  "/(dashboard)/admin/bank-info/page": "app/(dashboard)/admin/bank-info/page.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/(website)/checkout/page": "app/(website)/checkout/page.js",
+  "/(website)/page": "app/(website)/page.js",
+  "/(website)/product/[id]/page": "app/(website)/product/[id]/page.js",
+  "/(website)/payment/page": "app/(website)/payment/page.js",
+  "/(website)/order-status/[id]/page": "app/(website)/order-status/[id]/page.js"
 }

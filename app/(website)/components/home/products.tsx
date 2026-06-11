@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import Button from "../ui/button";
 import { FiPlus, FiCheck } from "react-icons/fi";
 import { useCartStore } from "@/app/hooks/use-cart-store";
 import { useState } from "react";
@@ -80,30 +79,20 @@ const ProductsSection = ({ products }) => {
                   backgroundPosition: 'center'
                 }}
               >
-                <Button
+                <button
                   onClick={(e) => handleAddToCart(e, product)}
-                  className={`absolute right-3 top-3 transition-all duration-300 z-10 ${
+                  className={`absolute right-3 top-3 transition-all duration-300 z-10 w-10 h-10 flex items-center justify-center rounded-lg shadow-md hover:shadow-lg hover:scale-105 ${
                     addedProducts[product._id] 
-                      ? 'bg-green-500 scale-110' 
-                      : 'bg-orange-500 hover:bg-orange-600 hover:scale-110'
-                  } text-white! shadow-lg`}
-                  style={{
-                    width: 39.75,
-                    height: 39.75,
-                    borderRadius: 0,
-                    padding: 0,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    minWidth: 32,
-                  }}
+                      ? 'bg-green-500' 
+                      : 'bg-orange-500 hover:bg-orange-600'
+                  } text-white`}
                 >
                   {addedProducts[product._id] ? (
                     <FiCheck size={24} className="animate-pulse" />
                   ) : (
                     <FiPlus size={24} />
                   )}
-                </Button>
+                </button>
                 
                 <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
                   <span className="text-white text-sm font-medium bg-black/80 px-3 py-1.5 rounded-full transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
