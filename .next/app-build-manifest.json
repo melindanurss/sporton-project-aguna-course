@@ -1,14 +1,14 @@
 {
   "pages": {
-    "/(dashboard)/admin/products/page": [
+    "/(website)/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/admin/products/page.js"
+      "static/chunks/app/(website)/page.js"
     ],
-    "/(dashboard)/layout": [
+    "/(website)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/layout.js"
+      "static/chunks/app/(website)/layout.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -31,11 +31,6 @@
       "static/chunks/main-app.js",
       "static/chunks/app/not-found.js"
     ],
-    "/_not-found/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/_not-found/page.js"
-    ],
     "/(auth)/admin/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
@@ -46,20 +41,15 @@
       "static/chunks/main-app.js",
       "static/chunks/app/(auth)/layout.js"
     ],
-    "/(dashboard)/admin/categories/page": [
+    "/(dashboard)/admin/products/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/admin/categories/page.js"
+      "static/chunks/app/(dashboard)/admin/products/page.js"
     ],
-    "/(dashboard)/admin/transactions/page": [
+    "/(dashboard)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/admin/transactions/page.js"
-    ],
-    "/(dashboard)/admin/bank-info/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(dashboard)/admin/bank-info/page.js"
+      "static/chunks/app/(dashboard)/layout.js"
     ]
   }
 }
