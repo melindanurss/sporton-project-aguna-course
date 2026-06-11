@@ -1,8 +1,10 @@
 "use client";
 
 import { FiCreditCard, FiEdit2, FiTrash2 } from "react-icons/fi";
+import { useState } from "react";
+import Swal from "sweetalert2";
 
-const bankData = [
+const initialBankData = [
   {
     id: 1,
     bankName: "BCA",
@@ -23,10 +25,107 @@ const bankData = [
   },
 ];
 
-const BankInfoList = () => {
+const BankInfoList = ({ onBanksUpdate }: { onBanksUpdate?: (banks: any[]) => void }) => {
+  const [banks, setBanks] = useState(initialBankData);
+
+  const updateBanks = (newBanks: any[]) => {
+    setBanks(newBanks);
+    if (onBanksUpdate) {
+      onBanksUpdate(newBanks);
+    }
+  };
+
+  const handleDelete = async (id: number, bankName: string) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: `You are about to delete "${bankName}" bank account. This action cannot be undone!`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#ef4444",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "Cancel",
+    });
+
+    if (result.isConfirmed) {
+      updateBanks(banks.filter((bank) => bank.id !== id));
+      await Swal.fire({
+        icon: "success",
+        title: "Deleted!",
+        text: `"${bankName}" bank account has been deleted.`,
+        timer: 1500,
+        showConfirmButton: false,
+        iconColor: "#22c55e",
+      });
+    }
+  };
+
+  const handleEdit = (bank: any) => {
+    Swal.fire({
+      title: "Edit Bank Account",
+      html: `
+        <div class="text-left" style="padding: 0 1rem;">
+          <div class="mb-4">
+            <label class="block text-sm font-semibold text-gray-700 text-left mb-1">Bank Name</label>
+            <input id="swal-bank-name" class="swal2-input" value="${bank.bankName}" placeholder="e.g. BCA, Mandiri, BRI" style="width: 100%; margin: 0;">
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-semibold text-gray-700 text-left mb-1">Account Number</label>
+            <input id="swal-account-number" class="swal2-input" value="${bank.accountNumber}" placeholder="Account Number" style="width: 100%; margin: 0;">
+          </div>
+          <div class="mb-4">
+            <label class="block text-sm font-semibold text-gray-700 text-left mb-1">Account Holder</label>
+            <input id="swal-account-name" class="swal2-input" value="${bank.accountName}" placeholder="Account Holder Name" style="width: 100%; margin: 0;">
+          </div>
+        </div>
+      `,
+      focusConfirm: false,
+      showCancelButton: true,
+      confirmButtonColor: "#ff5f3f",
+      cancelButtonColor: "#6c757d",
+      confirmButtonText: "Save Changes",
+      cancelButtonText: "Cancel",
+      width: "600px",
+      padding: "1.5rem",
+      customClass: {
+        popup: "rounded-xl",
+        input: "rounded-lg border-gray-300 focus:border-primary focus:ring-primary",
+      },
+      preConfirm: () => {
+        const bankName = (document.getElementById("swal-bank-name") as HTMLInputElement).value;
+        const accountNumber = (document.getElementById("swal-account-number") as HTMLInputElement).value;
+        const accountName = (document.getElementById("swal-account-name") as HTMLInputElement).value;
+        
+        if (!bankName || !accountNumber || !accountName) {
+          Swal.showValidationMessage("Please fill in all fields");
+          return false;
+        }
+        
+        return { bankName, accountNumber, accountName };
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        const updatedBanks = banks.map((b) =>
+          b.id === bank.id
+            ? { ...b, bankName: result.value.bankName, accountNumber: result.value.accountNumber, accountName: result.value.accountName }
+            : b
+        );
+        updateBanks(updatedBanks);
+        Swal.fire({
+          icon: "success",
+          title: "Updated!",
+          text: `"${result.value.bankName}" bank account has been updated.`,
+          timer: 1500,
+          showConfirmButton: false,
+          iconColor: "#22c55e",
+        });
+      }
+    });
+  };
+
   return (
     <div className="grid grid-cols-3 gap-8">
-      {bankData.map((data) => (
+      {banks.map((data) => (
         <div key={data.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
           <div className="flex justify-between items-start p-5">
             <div className="flex gap-3 items-center">
@@ -39,10 +138,18 @@ const BankInfoList = () => {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <button className="p-1 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors">
+              <button
+                onClick={() => handleEdit(data)}
+                className="p-1 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
+                title="Edit Bank Account"
+              >
                 <FiEdit2 size={18} />
               </button>
-              <button className="p-1 text-red-500 hover:bg-red-50 rounded-lg transition-colors">
+              <button
+                onClick={() => handleDelete(data.id, data.bankName)}
+                className="p-1 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                title="Delete Bank Account"
+              >
                 <FiTrash2 size={18} />
               </button>
             </div>

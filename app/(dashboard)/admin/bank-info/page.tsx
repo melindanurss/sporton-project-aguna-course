@@ -8,9 +8,14 @@ import BankInfoModal from "../../components/bank-info/bank-info-modal";
 
 const BankInfoManagement = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [banks, setBanks] = useState([]);
 
   const handleCloseModal = () => {
     setIsOpen(false);
+  };
+
+  const handleBankAdded = (newBank: any) => {
+    setBanks((prev) => [...prev, newBank]);
   };
 
   return (
@@ -22,13 +27,13 @@ const BankInfoManagement = () => {
             Manage destination accounts for customer transfers.
           </p>
         </div>
-        <Button className="rounded-lg" onClick={() => setIsOpen(true)}>
+        <Button variant="primary" className="rounded-lg" onClick={() => setIsOpen(true)}>
           <FiPlus size={24} />
           Add Bank Account
         </Button>
       </div>
-      <BankInfoList />
-      <BankInfoModal isOpen={isOpen} onClose={handleCloseModal} />
+      <BankInfoList onBanksUpdate={setBanks} />
+      <BankInfoModal isOpen={isOpen} onClose={handleCloseModal} onBankAdded={handleBankAdded} />
     </div>
   );
 };

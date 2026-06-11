@@ -4,20 +4,91 @@ import Button from "@/app/(website)/components/ui/button";
 import Modal from "../ui/modal";
 import ImageUploadPreview from "../ui/image-upload-preview";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 type TProductModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  onProductAdded?: (product: any) => void;
 };
 
-const ProductModal = ({ isOpen, onClose }: TProductModalProps) => {
+const ProductModal = ({ isOpen, onClose, onProductAdded }: TProductModalProps) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string>("");
+  const [productName, setProductName] = useState("");
+  const [price, setPrice] = useState("");
+  const [stock, setStock] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [description, setDescription] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleImageChange = (file: File) => {
     setImageFile(file);
     setImagePreview(URL.createObjectURL(file));
+  };
+
+  const resetForm = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    setProductName("");
+    setPrice("");
+    setStock("");
+    setSelectedCategory("");
+    setDescription("");
+  };
+
+  const handleCreateProduct = async () => {
+    if (!productName || !price || !stock || !selectedCategory || !description) {
+      await Swal.fire({
+        icon: "error",
+        title: "Missing Fields",
+        text: "Please fill in all fields",
+        confirmButtonColor: "#ff5f3f",
+      });
+      return;
+    }
+
+    if (!imageFile) {
+      await Swal.fire({
+        icon: "error",
+        title: "Missing Image",
+        text: "Please upload a product image",
+        confirmButtonColor: "#ff5f3f",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    const newId = Date.now();
+    const newProduct = {
+      id: newId,
+      name: productName,
+      imageUrl: imagePreview,
+      category: selectedCategory,
+      price: parseInt(price),
+      stock: parseInt(stock),
+      description: description,
+    };
+
+    setTimeout(async () => {
+      if (onProductAdded) {
+        onProductAdded(newProduct);
+      }
+      
+      await Swal.fire({
+        icon: "success",
+        title: "Product Created!",
+        text: `"${productName}" has been added successfully.`,
+        timer: 1500,
+        showConfirmButton: false,
+        iconColor: "#22c55e",
+      });
+      
+      resetForm();
+      onClose();
+      setIsLoading(false);
+    }, 500);
   };
 
   return (
@@ -40,6 +111,8 @@ const ProductModal = ({ isOpen, onClose }: TProductModalProps) => {
                 type="text"
                 id="productName"
                 name="productName"
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
                 placeholder="e. g. Running Shoes"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
               />
@@ -51,6 +124,8 @@ const ProductModal = ({ isOpen, onClose }: TProductModalProps) => {
                   type="number"
                   id="price"
                   name="price"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                   placeholder="e. g. 500000"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                 />
@@ -61,6 +136,8 @@ const ProductModal = ({ isOpen, onClose }: TProductModalProps) => {
                   type="number"
                   id="stock"
                   name="stock"
+                  value={stock}
+                  onChange={(e) => setStock(e.target.value)}
                   placeholder="e. g. 100"
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                 />
@@ -75,11 +152,11 @@ const ProductModal = ({ isOpen, onClose }: TProductModalProps) => {
                 onChange={(e) => setSelectedCategory(e.target.value)}
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all bg-white"
               >
-                <option value="" disabled selected>Select Category</option>
-                <option value="running">Running</option>
-                <option value="football">Football</option>
-                <option value="tennis">Tennis</option>
-                <option value="badminton">Badminton</option>
+                <option value="" disabled>Select Category</option>
+                <option value="Running">Running</option>
+                <option value="Football">Football</option>
+                <option value="Tennis">Tennis</option>
+                <option value="Badminton">Badminton</option>
               </select>
             </div>
           </div>
@@ -91,6 +168,8 @@ const ProductModal = ({ isOpen, onClose }: TProductModalProps) => {
             name="description"
             id="description"
             rows={5}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
             placeholder="Product Details..."
             className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"
           ></textarea>
@@ -107,8 +186,10 @@ const ProductModal = ({ isOpen, onClose }: TProductModalProps) => {
           <Button
             variant="primary"
             className="rounded-lg px-6 py-2"
+            onClick={handleCreateProduct}
+            disabled={isLoading}
           >
-            Create Product
+            {isLoading ? "Creating..." : "Create Product"}
           </Button>
         </div>
       </div>

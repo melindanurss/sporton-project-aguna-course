@@ -3,20 +3,65 @@
 import Button from "@/app/(website)/components/ui/button";
 import Modal from "../ui/modal";
 import { useState } from "react";
+import Swal from "sweetalert2";
 
 type TBankInfoModalProps = {
   isOpen: boolean;
   onClose: () => void;
+  onBankAdded?: (bank: any) => void;
 };
 
-const BankInfoModal = ({ isOpen, onClose }: TBankInfoModalProps) => {
+const BankInfoModal = ({ isOpen, onClose, onBankAdded }: TBankInfoModalProps) => {
   const [bankName, setBankName] = useState("");
   const [accountNumber, setAccountNumber] = useState("");
   const [accountName, setAccountName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = () => {
-    console.log({ bankName, accountNumber, accountName });
-    onClose();
+  const resetForm = () => {
+    setBankName("");
+    setAccountNumber("");
+    setAccountName("");
+  };
+
+  const handleSubmit = async () => {
+    if (!bankName || !accountNumber || !accountName) {
+      await Swal.fire({
+        icon: "error",
+        title: "Missing Fields",
+        text: "Please fill in all fields",
+        confirmButtonColor: "#ff5f3f",
+      });
+      return;
+    }
+
+    setIsLoading(true);
+
+    const newId = Date.now();
+    const newBank = {
+      id: newId,
+      bankName: bankName,
+      accountNumber: accountNumber,
+      accountName: accountName,
+    };
+
+    setTimeout(async () => {
+      if (onBankAdded) {
+        onBankAdded(newBank);
+      }
+      
+      await Swal.fire({
+        icon: "success",
+        title: "Bank Account Added!",
+        text: `"${bankName}" bank account has been added successfully.`,
+        timer: 1500,
+        showConfirmButton: false,
+        iconColor: "#22c55e",
+      });
+      
+      resetForm();
+      onClose();
+      setIsLoading(false);
+    }, 500);
   };
 
   return (
@@ -75,8 +120,9 @@ const BankInfoModal = ({ isOpen, onClose }: TBankInfoModalProps) => {
             variant="primary"
             className="rounded-lg px-6 py-2"
             onClick={handleSubmit}
+            disabled={isLoading}
           >
-            Add Bank Account
+            {isLoading ? "Adding..." : "Add Bank Account"}
           </Button>
         </div>
       </div>

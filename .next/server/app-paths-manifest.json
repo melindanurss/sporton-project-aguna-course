@@ -1,7 +1,7 @@
 {
+  "/(dashboard)/admin/transactions/page": "app/(dashboard)/admin/transactions/page.js",
   "/(auth)/admin/login/page": "app/(auth)/admin/login/page.js",
   "/(dashboard)/admin/categories/page": "app/(dashboard)/admin/categories/page.js",
   "/(dashboard)/admin/products/page": "app/(dashboard)/admin/products/page.js",
-  "/(dashboard)/admin/transactions/page": "app/(dashboard)/admin/transactions/page.js",
   "/(dashboard)/admin/bank-info/page": "app/(dashboard)/admin/bank-info/page.js"
 }

@@ -8,9 +8,14 @@ import ProductModal from "../../components/products/product-modal";
 
 const ProductManagement = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [products, setProducts] = useState([]);
 
   const handleCloseModal = () => {
     setIsOpen(false);
+  };
+
+  const handleProductAdded = (newProduct: any) => {
+    setProducts((prev) => [...prev, newProduct]);
   };
 
   return (
@@ -25,8 +30,8 @@ const ProductManagement = () => {
           Add Product
         </Button>
       </div>
-      <ProductTable />
-      <ProductModal isOpen={isOpen} onClose={handleCloseModal} />
+      <ProductTable onProductsUpdate={setProducts} />
+      <ProductModal isOpen={isOpen} onClose={handleCloseModal} onProductAdded={handleProductAdded} />
     </div>
   );
 };
