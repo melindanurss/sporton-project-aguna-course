@@ -2,8 +2,20 @@ export async function fetchAPI<T>(
   endpoint: string,
   options?: RequestInit
 ): Promise<T> {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    ...(options?.headers || {}),
+  };
+  
+  if (token) {
+    headers["Authorization"] = `Bearer ${token}`;
+  }
+
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${endpoint}`, {
     ...options,
+    headers,
     cache: options?.cache || "no-store",
   });
 
@@ -33,4 +45,11 @@ export function getImageUrl(path: string) {
     return `${process.env.NEXT_PUBLIC_API_ROOT}/${path}`;
   }
   return `${process.env.NEXT_PUBLIC_API_ROOT}/${path}`;
+}
+
+export function getAuthHeaders() {
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  return {
+    Authorization: `Bearer ${token}`,
+  };
 }

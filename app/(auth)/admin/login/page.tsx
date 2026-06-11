@@ -5,36 +5,58 @@ import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
+import { login } from "@/app/services/auth.service";
 
 const LoginPage = () => {
   const { push } = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    if (email === "admin@sporton.com" && password === "Adm1NSp0rt2530") {
+    if (!email || !password) {
       await Swal.fire({
-        icon: "success",
-        title: "Login Successful!",
-        text: "Welcome to SportOn Admin Dashboard",
-        timer: 1500,
-        showConfirmButton: false,
-        background: "#fff",
-        iconColor: "#22c55e",
-        confirmButtonColor: "#22c55e",
+        icon: "error",
+        title: "Missing Fields",
+        text: "Please enter both email and password.",
+        confirmButtonColor: "#ef4444",
+        confirmButtonText: "OK",
       });
-      push("/admin/products");
-    } else {
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const data = await login({ email, password });
+
+      if (data.token) {
+        await Swal.fire({
+          icon: "success",
+          title: "Login Successful!",
+          text: "Welcome to SportOn Admin Dashboard",
+          timer: 1500,
+          showConfirmButton: false,
+          background: "#fff",
+          iconColor: "#22c55e",
+        });
+        push("/admin/products");
+      } else {
+        throw new Error("Invalid response from server");
+      }
+    } catch (error: any) {
+      console.error("Login error:", error);
       await Swal.fire({
         icon: "error",
         title: "Login Failed!",
-        text: "Invalid email or password. Please try again.",
+        text: error.message || "Invalid email or password. Please try again.",
         confirmButtonColor: "#ef4444",
         confirmButtonText: "Try Again",
-        iconColor: "#ef4444",
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -78,8 +100,8 @@ const LoginPage = () => {
             required
           />
         </div>
-        <Button type="submit" variant="primary" className="w-full rounded-lg">
-          Sign In
+        <Button type="submit" variant="primary" className="w-full rounded-lg" disabled={isLoading}>
+          {isLoading ? "Signing in..." : "Sign In"}
         </Button>
       </form>
     </div>

@@ -11,6 +11,7 @@ import {
   FiShoppingCart,
 } from "react-icons/fi";
 import Swal from "sweetalert2";
+import { logout } from "@/app/services/auth.service";
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -36,6 +37,7 @@ const Sidebar = () => {
     });
 
     if (result.isConfirmed) {
+      logout();
       await Swal.fire({
         icon: "success",
         title: "Logged Out!",

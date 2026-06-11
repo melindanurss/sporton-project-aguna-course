@@ -1,14 +1,14 @@
 {
   "pages": {
-    "/(website)/page": [
+    "/(dashboard)/admin/products/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(website)/page.js"
+      "static/chunks/app/(dashboard)/admin/products/page.js"
     ],
-    "/(website)/layout": [
+    "/(dashboard)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(website)/layout.js"
+      "static/chunks/app/(dashboard)/layout.js"
     ],
     "/layout": [
       "static/chunks/webpack.js",
@@ -31,25 +31,35 @@
       "static/chunks/main-app.js",
       "static/chunks/app/not-found.js"
     ],
-    "/(website)/product/[id]/page": [
+    "/_not-found/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(website)/product/[id]/page.js"
+      "static/chunks/app/_not-found/page.js"
     ],
-    "/(website)/checkout/page": [
+    "/(auth)/admin/login/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(website)/checkout/page.js"
+      "static/chunks/app/(auth)/admin/login/page.js"
     ],
-    "/(website)/payment/page": [
+    "/(auth)/layout": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(website)/payment/page.js"
+      "static/chunks/app/(auth)/layout.js"
     ],
-    "/(website)/order-status/[id]/page": [
+    "/(dashboard)/admin/categories/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(website)/order-status/[id]/page.js"
+      "static/chunks/app/(dashboard)/admin/categories/page.js"
+    ],
+    "/(dashboard)/admin/transactions/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/admin/transactions/page.js"
+    ],
+    "/(dashboard)/admin/bank-info/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(dashboard)/admin/bank-info/page.js"
     ]
   }
 }
