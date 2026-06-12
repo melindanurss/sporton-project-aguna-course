@@ -10,25 +10,6 @@ const ProductsSection = ({ products }) => {
   const { addItem } = useCartStore();
   const [addedProducts, setAddedProducts] = useState({});
 
-  const targetProducts = [
-    { name: "SportOn HyperFast V2", category: "Running", price: 568000 },
-    { name: "SportOn FootFastball V3", category: "Football", price: 599000 },
-    { name: "SportOn Hypershirt Black", category: "Running", price: 330000 },
-    { name: "SportOn AirFlow Shirt", category: "Running", price: 230000 },
-    { name: "Raket Green Tennis", category: "Tennis", price: 300000 },
-    { name: "baju bola ijo", price: 300000 },
-    { name: "Testing", price: 5000 },
-    { name: "Tennis Racket testing", price: 200000 },
-  ];
-
-  const filteredProducts = products?.filter(product => 
-    targetProducts.some(target => target.name === product.name)
-  ) || [];
-
-  const sortedProducts = targetProducts.map(target => 
-    filteredProducts.find(p => p.name === target.name)
-  ).filter(Boolean);
-
   const handleAddToCart = (e, product) => {
     e.preventDefault(); 
     e.stopPropagation(); 
@@ -46,13 +27,13 @@ const ProductsSection = ({ products }) => {
     }, 1000);
   };
 
-  if (sortedProducts.length === 0) {
+  if (!products || products.length === 0) {
     return (
       <section id="products-section" className="container mx-auto mt-32 mb-20">
         <h2 className="font-bold italic text-4xl text-center mb-11">
           <span className="text-primary">OUR </span>PRODUCTS
         </h2>
-        <div className="text-center py-10">Loading products...</div>
+        <div className="text-center py-10 text-gray-500">No products found.</div>
       </section>
     );
   }
@@ -62,8 +43,8 @@ const ProductsSection = ({ products }) => {
       <h2 className="font-bold italic text-4xl text-center mb-11">
         <span className="text-primary">OUR </span>PRODUCTS
       </h2>
-      <div className="grid grid-cols-4 gap-5">
-        {sortedProducts.map((product) => (
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+        {products.map((product) => (
           <Link
             href={`/product/${product._id}`}
             key={product._id}
@@ -71,7 +52,7 @@ const ProductsSection = ({ products }) => {
           >
             <div className="relative">
               <div 
-                className="bg-primary-light w-full aspect-square relative overflow-hidden"
+                className="bg-primary-light w-full aspect-square relative overflow-hidden rounded-lg"
                 style={{ 
                   backgroundImage: `url(${getImageUrl(product.imageUrl)})`,
                   backgroundSize: 'contain',
@@ -101,9 +82,9 @@ const ProductsSection = ({ products }) => {
                 </div>
               </div>
             </div>
-            <h3 className="font-medium text-lg mb-1.5 mt-4">{product.name}</h3>
+            <h3 className="font-medium text-lg mb-1.5 mt-4 line-clamp-1">{product.name}</h3>
             <div className="flex justify-between mb-8">
-              <div className="text-gray-500">{product.category?.name}</div>
+              <div className="text-gray-500 text-sm">{product.category?.name || "Uncategorized"}</div>
               <div className="font-medium text-primary">
                 {priceFormatter(product.price)}
               </div>
