@@ -1,5 +1,7 @@
-import Button from "@/app/(website)/components/ui/button";
+"use client";
+
 import Modal from "./modal";
+import Button from "@/app/(website)/components/ui/button";
 
 type TDeleteModalProps = {
   isOpen: boolean;
@@ -11,8 +13,8 @@ const DeleteModal = ({ isOpen, onClose, onConfirm }: TDeleteModalProps) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Delete Item">
       <p>
-        Are you sure you want to delete this item ? If you click delete, it will
-        permanently removed.
+        Are you sure you want to delete this item? If you click delete, it will
+        be permanently removed.
       </p>
       <div className="flex gap-5 mt-5">
         <Button variant="ghost" className="w-full rounded-md" onClick={onClose}>

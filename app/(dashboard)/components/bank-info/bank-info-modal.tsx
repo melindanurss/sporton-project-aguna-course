@@ -4,6 +4,7 @@ import Button from "@/app/(website)/components/ui/button";
 import Modal from "../ui/modal";
 import { useState } from "react";
 import Swal from "sweetalert2";
+import { createBank } from "@/app/services/bank.service";
 
 type TBankInfoModalProps = {
   isOpen: boolean;
@@ -36,15 +37,13 @@ const BankInfoModal = ({ isOpen, onClose, onBankAdded }: TBankInfoModalProps) =>
 
     setIsLoading(true);
 
-    const newId = Date.now();
-    const newBank = {
-      id: newId,
-      bankName: bankName,
-      accountNumber: accountNumber,
-      accountName: accountName,
-    };
-
-    setTimeout(async () => {
+    try {
+      const newBank = await createBank({
+        bankName: bankName,
+        accountNumber: accountNumber,
+        accountName: accountName,
+      });
+      
       if (onBankAdded) {
         onBankAdded(newBank);
       }
@@ -60,8 +59,16 @@ const BankInfoModal = ({ isOpen, onClose, onBankAdded }: TBankInfoModalProps) =>
       
       resetForm();
       onClose();
+    } catch (error: any) {
+      await Swal.fire({
+        icon: "error",
+        title: "Creation Failed!",
+        text: error.message || "Could not add bank account.",
+        confirmButtonColor: "#ef4444",
+      });
+    } finally {
       setIsLoading(false);
-    }, 500);
+    }
   };
 
   return (

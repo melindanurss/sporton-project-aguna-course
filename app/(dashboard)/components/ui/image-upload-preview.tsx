@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { FiEdit, FiUploadCloud } from "react-icons/fi";
 
 type TImageUploadPreviewProps = {
@@ -18,6 +18,7 @@ const ImageUploadPreview = ({
   className,
 }: TImageUploadPreviewProps) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [localPreview, setLocalPreview] = useState<string | null>(value || null);
 
   const handleImageClick = () => {
     fileInputRef?.current?.click();
@@ -26,6 +27,19 @@ const ImageUploadPreview = ({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const file = e.target.files[0];
+      
+      // Validasi file
+      console.log("File selected:", {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+      });
+
+      // Buat preview lokal
+      const previewUrl = URL.createObjectURL(file);
+      setLocalPreview(previewUrl);
+      
+      // Kirim file ke parent
       onChange(file);
     }
   };
@@ -41,11 +55,11 @@ const ImageUploadPreview = ({
         onClick={handleImageClick}
         className="border-2 border-dashed border-primary bg-primary/5 rounded-lg flex-1 flex flex-col justify-center items-center cursor-pointer hover:bg-primary/10 transition-all min-h-[200px]"
       >
-        {value ? (
+        {localPreview ? (
           <div className="relative w-full h-full flex items-center justify-center p-4">
             <Image
-              src={value}
-              alt="preview product"
+              src={localPreview}
+              alt="preview category"
               className="max-w-full max-h-full object-contain"
               width={150}
               height={150}
@@ -60,13 +74,14 @@ const ImageUploadPreview = ({
           <div className="text-center p-4">
             <FiUploadCloud className="text-primary mx-auto mb-2" size={32} />
             <span className="text-sm text-gray-500">Click to Upload</span>
+            <p className="text-xs text-gray-400 mt-1"></p>
           </div>
         )}
         <input
           type="file"
           ref={fileInputRef}
           className="hidden"
-          accept="image/*"
+          accept="image/jpeg,image/jpg,image/png,image/webp"
           onChange={handleFileChange}
         />
       </div>

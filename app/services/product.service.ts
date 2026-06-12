@@ -12,6 +12,7 @@ export const getProductDetail = async (id: string): Promise<Product> => {
 export const createProduct = async (data: FormData): Promise<Product> => {
   const token = localStorage.getItem("token");
   
+  // JANGAN set Content-Type! Biarkan browser yang mengatur untuk FormData
   const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/products`, {
     method: "POST",
     headers: {

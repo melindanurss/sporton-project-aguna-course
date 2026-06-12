@@ -8,14 +8,11 @@ import BankInfoModal from "../../components/bank-info/bank-info-modal";
 
 const BankInfoManagement = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [banks, setBanks] = useState([]);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const handleCloseModal = () => {
     setIsOpen(false);
-  };
-
-  const handleBankAdded = (newBank: any) => {
-    setBanks((prev) => [...prev, newBank]);
+    setRefreshKey(prev => prev + 1);
   };
 
   return (
@@ -32,8 +29,8 @@ const BankInfoManagement = () => {
           Add Bank Account
         </Button>
       </div>
-      <BankInfoList onBanksUpdate={setBanks} />
-      <BankInfoModal isOpen={isOpen} onClose={handleCloseModal} onBankAdded={handleBankAdded} />
+      <BankInfoList key={refreshKey} />
+      <BankInfoModal isOpen={isOpen} onClose={handleCloseModal} />
     </div>
   );
 };

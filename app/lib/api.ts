@@ -4,10 +4,15 @@ export async function fetchAPI<T>(
 ): Promise<T> {
   const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
   
+  const isFormData = options?.body instanceof FormData;
+  
   const headers: HeadersInit = {
-    "Content-Type": "application/json",
     ...(options?.headers || {}),
   };
+  
+  if (!isFormData && !headers["Content-Type"]) {
+    headers["Content-Type"] = "application/json";
+  }
   
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
