@@ -12,7 +12,14 @@ const BankInfoManagement = () => {
 
   const handleCloseModal = () => {
     setIsOpen(false);
+  };
+
+  const handleBankAdded = () => {
     setRefreshKey(prev => prev + 1);
+  };
+
+  const handleOpenModal = () => {
+    setIsOpen(true);
   };
 
   return (
@@ -24,13 +31,17 @@ const BankInfoManagement = () => {
             Manage destination accounts for customer transfers.
           </p>
         </div>
-        <Button variant="primary" className="rounded-lg" onClick={() => setIsOpen(true)}>
+        <Button variant="primary" className="rounded-lg" onClick={handleOpenModal}>
           <FiPlus size={24} />
           Add Bank Account
         </Button>
       </div>
       <BankInfoList key={refreshKey} />
-      <BankInfoModal isOpen={isOpen} onClose={handleCloseModal} />
+      <BankInfoModal 
+        isOpen={isOpen} 
+        onClose={handleCloseModal} 
+        onBankAdded={handleBankAdded}
+      />
     </div>
   );
 };

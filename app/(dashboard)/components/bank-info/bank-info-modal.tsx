@@ -9,7 +9,7 @@ import { createBank } from "@/app/services/bank.service";
 type TBankInfoModalProps = {
   isOpen: boolean;
   onClose: () => void;
-  onBankAdded?: (bank: any) => void;
+  onBankAdded?: () => void;
 };
 
 const BankInfoModal = ({ isOpen, onClose, onBankAdded }: TBankInfoModalProps) => {
@@ -38,15 +38,11 @@ const BankInfoModal = ({ isOpen, onClose, onBankAdded }: TBankInfoModalProps) =>
     setIsLoading(true);
 
     try {
-      const newBank = await createBank({
+      await createBank({
         bankName: bankName,
         accountNumber: accountNumber,
         accountName: accountName,
       });
-      
-      if (onBankAdded) {
-        onBankAdded(newBank);
-      }
       
       await Swal.fire({
         icon: "success",
@@ -58,6 +54,7 @@ const BankInfoModal = ({ isOpen, onClose, onBankAdded }: TBankInfoModalProps) =>
       });
       
       resetForm();
+      onBankAdded?.();
       onClose();
     } catch (error: any) {
       await Swal.fire({

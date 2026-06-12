@@ -1,41 +1,38 @@
 "use client";
 
 import { FiCreditCard, FiEdit2, FiTrash2 } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+import { getAllBanks, deleteBank } from "@/app/services/bank.service";
+import { Bank } from "@/app/types";
 
-const initialBankData = [
-  {
-    id: 1,
-    bankName: "BCA",
-    accountNumber: "1234567890",
-    accountName: "PT SportOn Digital",
-  },
-  {
-    id: 2,
-    bankName: "Mandiri",
-    accountNumber: "9876543210123",
-    accountName: "PT SportOn Digital",
-  },
-  {
-    id: 3,
-    bankName: "BRI",
-    accountNumber: "456789123456",
-    accountName: "PT SportOn Digital",
-  },
-];
+const BankInfoList = () => {
+  const [banks, setBanks] = useState<Bank[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-const BankInfoList = ({ onBanksUpdate }: { onBanksUpdate?: (banks: any[]) => void }) => {
-  const [banks, setBanks] = useState(initialBankData);
-
-  const updateBanks = (newBanks: any[]) => {
-    setBanks(newBanks);
-    if (onBanksUpdate) {
-      onBanksUpdate(newBanks);
+  const fetchBanks = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getAllBanks();
+      setBanks(data);
+    } catch (error) {
+      console.error("Failed to fetch banks:", error);
+      await Swal.fire({
+        icon: "error",
+        title: "Failed to Load",
+        text: "Could not load bank accounts.",
+        confirmButtonColor: "#ff5f3f",
+      });
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleDelete = async (id: number, bankName: string) => {
+  useEffect(() => {
+    fetchBanks();
+  }, []);
+
+  const handleDelete = async (id: string, bankName: string) => {
     const result = await Swal.fire({
       title: "Are you sure?",
       text: `You are about to delete "${bankName}" bank account. This action cannot be undone!`,
@@ -48,19 +45,29 @@ const BankInfoList = ({ onBanksUpdate }: { onBanksUpdate?: (banks: any[]) => voi
     });
 
     if (result.isConfirmed) {
-      updateBanks(banks.filter((bank) => bank.id !== id));
-      await Swal.fire({
-        icon: "success",
-        title: "Deleted!",
-        text: `"${bankName}" bank account has been deleted.`,
-        timer: 1500,
-        showConfirmButton: false,
-        iconColor: "#22c55e",
-      });
+      try {
+        await deleteBank(id);
+        await fetchBanks();
+        await Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: `"${bankName}" bank account has been deleted.`,
+          timer: 1500,
+          showConfirmButton: false,
+          iconColor: "#22c55e",
+        });
+      } catch (error) {
+        await Swal.fire({
+          icon: "error",
+          title: "Delete Failed!",
+          text: "Could not delete bank account.",
+          confirmButtonColor: "#ef4444",
+        });
+      }
     }
   };
 
-  const handleEdit = (bank: any) => {
+  const handleEdit = (bank: Bank) => {
     Swal.fire({
       title: "Edit Bank Account",
       html: `
@@ -87,10 +94,6 @@ const BankInfoList = ({ onBanksUpdate }: { onBanksUpdate?: (banks: any[]) => voi
       cancelButtonText: "Cancel",
       width: "600px",
       padding: "1.5rem",
-      customClass: {
-        popup: "rounded-xl",
-        input: "rounded-lg border-gray-300 focus:border-primary focus:ring-primary",
-      },
       preConfirm: () => {
         const bankName = (document.getElementById("swal-bank-name") as HTMLInputElement).value;
         const accountNumber = (document.getElementById("swal-account-number") as HTMLInputElement).value;
@@ -103,30 +106,53 @@ const BankInfoList = ({ onBanksUpdate }: { onBanksUpdate?: (banks: any[]) => voi
         
         return { bankName, accountNumber, accountName };
       },
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-        const updatedBanks = banks.map((b) =>
-          b.id === bank.id
-            ? { ...b, bankName: result.value.bankName, accountNumber: result.value.accountNumber, accountName: result.value.accountName }
-            : b
-        );
-        updateBanks(updatedBanks);
-        Swal.fire({
-          icon: "success",
-          title: "Updated!",
-          text: `"${result.value.bankName}" bank account has been updated.`,
-          timer: 1500,
-          showConfirmButton: false,
-          iconColor: "#22c55e",
-        });
+        try {
+          const { updateBank } = await import("@/app/services/bank.service");
+          await updateBank(bank._id, result.value);
+          await fetchBanks();
+          Swal.fire({
+            icon: "success",
+            title: "Updated!",
+            text: `"${result.value.bankName}" bank account has been updated.`,
+            timer: 1500,
+            showConfirmButton: false,
+            iconColor: "#22c55e",
+          });
+        } catch (error) {
+          Swal.fire({
+            icon: "error",
+            title: "Update Failed!",
+            text: "Could not update bank account.",
+            confirmButtonColor: "#ef4444",
+          });
+        }
       }
     });
   };
 
+  if (isLoading) {
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent"></div>
+        <p className="mt-4 text-gray-500">Loading bank accounts...</p>
+      </div>
+    );
+  }
+
+  if (banks.length === 0) {
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <p className="text-gray-500">No bank accounts found. Click "Add Bank Account" to create one.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-3 gap-8">
       {banks.map((data) => (
-        <div key={data.id} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
+        <div key={data._id} className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
           <div className="flex justify-between items-start p-5">
             <div className="flex gap-3 items-center">
               <div className="bg-blue-50 text-blue-600 rounded-lg w-10 h-10 flex justify-center items-center">
@@ -146,7 +172,7 @@ const BankInfoList = ({ onBanksUpdate }: { onBanksUpdate?: (banks: any[]) => voi
                 <FiEdit2 size={18} />
               </button>
               <button
-                onClick={() => handleDelete(data.id, data.bankName)}
+                onClick={() => handleDelete(data._id, data.bankName)}
                 className="p-1 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                 title="Delete Bank Account"
               >

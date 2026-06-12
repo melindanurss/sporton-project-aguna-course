@@ -1,1 +1,1 @@
-self.__REACT_LOADABLE_MANIFEST="{}"
+self.__REACT_LOADABLE_MANIFEST="{\"app\\\\(dashboard)\\\\components\\\\bank-info\\\\bank-info-list.tsx -> @/app/services/bank.service\":{\"id\":\"app\\\\(dashboard)\\\\components\\\\bank-info\\\\bank-info-list.tsx -> @/app/services/bank.service\",\"files\":[]}}"

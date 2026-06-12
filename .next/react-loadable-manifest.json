@@ -1,1 +1,6 @@
-{}
+{
+  "app\\(dashboard)\\components\\bank-info\\bank-info-list.tsx -> @/app/services/bank.service": {
+    "id": "app\\(dashboard)\\components\\bank-info\\bank-info-list.tsx -> @/app/services/bank.service",
+    "files": []
+  }
+}
