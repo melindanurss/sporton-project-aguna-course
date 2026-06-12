@@ -2,19 +2,45 @@
 
 import priceFormatter from "@/app/utils/price-formatter";
 import { FiEye } from "react-icons/fi";
-import React from "react";
-
-const transactionData = [
-  { id: 1, date: "23/02/2026 19:32", customer: "John Doe", contact: "08123456789", total: 1500000, status: "pending" },
-  { id: 2, date: "23/02/2026 13:32", customer: "Delon Marx", contact: "08987654321", total: 2500000, status: "rejected" },
-  { id: 3, date: "23/02/2026 15:32", customer: "Ed Warren", contact: "08567482920", total: 1000000, status: "paid" },
-];
+import React, { useEffect, useState } from "react";
+import { getAllTransactions } from "@/app/services/transaction.service";
+import { Transaction } from "@/app/types";
+import Swal from "sweetalert2";
 
 type TTransactionTableProps = {
-  onViewDetails: (transaction: any) => void;
+  onViewDetails: (transaction: Transaction) => void;
+  refreshTrigger?: number;
 };
 
-const TransactionTable = ({ onViewDetails }: TTransactionTableProps) => {
+const TransactionTable = ({ onViewDetails, refreshTrigger = 0 }: TTransactionTableProps) => {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  const fetchTransactions = async () => {
+    setIsLoading(true);
+    try {
+      const data = await getAllTransactions();
+      const sortedData = data.sort((a, b) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setTransactions(sortedData);
+    } catch (error) {
+      console.error("Failed to fetch transactions:", error);
+      await Swal.fire({
+        icon: "error",
+        title: "Failed to Load",
+        text: "Could not load transactions.",
+        confirmButtonColor: "#ff5f3f",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [refreshTrigger]);
+
   const getStatusColor = (status: string) => {
     switch (status.toLowerCase()) {
       case "pending": return "bg-yellow-100 text-yellow-700 border-yellow-300 font-semibold";
@@ -24,63 +50,73 @@ const TransactionTable = ({ onViewDetails }: TTransactionTableProps) => {
     }
   };
 
-  return React.createElement(
-    "div",
-    { className: "bg-white rounded-xl border border-gray-200 overflow-hidden" },
-    React.createElement(
-      "table",
-      { className: "w-full text-left border-collapse" },
-      React.createElement(
-        "thead",
-        { className: "bg-gray-50" },
-        React.createElement(
-          "tr",
-          { className: "border-b border-gray-200" },
-          React.createElement("th", { className: "px-6 py-4 font-semibold text-gray-800 text-sm" }, "Date"),
-          React.createElement("th", { className: "px-6 py-4 font-semibold text-gray-800 text-sm" }, "Customer"),
-          React.createElement("th", { className: "px-6 py-4 font-semibold text-gray-800 text-sm" }, "Contact"),
-          React.createElement("th", { className: "px-6 py-4 font-semibold text-gray-800 text-sm" }, "Total"),
-          React.createElement("th", { className: "px-6 py-4 font-semibold text-gray-800 text-sm" }, "Status"),
-          React.createElement("th", { className: "px-6 py-4 font-semibold text-gray-800 text-sm" }, "Actions")
-        )
-      ),
-      React.createElement(
-        "tbody",
-        null,
-        transactionData.map((data) =>
-          React.createElement(
-            "tr",
-            { key: data.id, className: "border-b border-gray-100 hover:bg-gray-50 transition-colors" },
-            React.createElement("td", { className: "px-6 py-4 text-gray-700" }, data.date),
-            React.createElement("td", { className: "px-6 py-4 font-medium text-gray-800" }, data.customer),
-            React.createElement("td", { className: "px-6 py-4 text-gray-700" }, data.contact),
-            React.createElement("td", { className: "px-6 py-4 font-medium text-gray-800" }, priceFormatter(data.total)),
-            React.createElement(
-              "td",
-              { className: "px-6 py-4" },
-              React.createElement(
-                "span",
-                { className: `px-4 py-1 rounded-full border text-center w-fit text-sm uppercase ${getStatusColor(data.status)}` },
-                data.status
-              )
-            ),
-            React.createElement(
-              "td",
-              { className: "px-6 py-4" },
-              React.createElement(
-                "button",
-                {
-                  onClick: () => onViewDetails(data),
-                  className: "flex items-center gap-2 p-1 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
-                },
-                React.createElement(FiEye, { size: 18 }),
-                React.createElement("span", { className: "text-sm font-medium" }, "View Details")
-              )
-            )
-          )
-        )
-      )
-    )
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("id-ID", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+  };
+
+  if (isLoading) {
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-primary border-t-transparent"></div>
+        <p className="mt-4 text-gray-500">Loading transactions...</p>
+      </div>
+    );
+  }
+
+  if (transactions.length === 0) {
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <p className="text-gray-500">No transactions found.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <table className="w-full text-left border-collapse">
+        <thead className="bg-gray-50">
+          <tr className="border-b border-gray-200">
+            <th className="px-6 py-4 font-semibold text-gray-800 text-sm">Date</th>
+            <th className="px-6 py-4 font-semibold text-gray-800 text-sm">Customer</th>
+            <th className="px-6 py-4 font-semibold text-gray-800 text-sm">Contact</th>
+            <th className="px-6 py-4 font-semibold text-gray-800 text-sm">Total</th>
+            <th className="px-6 py-4 font-semibold text-gray-800 text-sm">Status</th>
+            <th className="px-6 py-4 font-semibold text-gray-800 text-sm">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {transactions.map((data) => (
+            <tr key={data._id} className="border-b border-gray-100 hover:bg-gray-50 transition-colors">
+              <td className="px-6 py-4 text-gray-700">{formatDate(data.createdAt)}</td>
+              <td className="px-6 py-4 font-medium text-gray-800">{data.customerName}</td>
+              <td className="px-6 py-4 text-gray-700">{data.customerContact || "-"}</td>
+              <td className="px-6 py-4 font-medium text-gray-800">{priceFormatter(parseInt(data.totalPayment))}</td>
+              <td className="px-6 py-4">
+                <span className={`px-4 py-1 rounded-full border text-center w-fit text-sm uppercase ${getStatusColor(data.status)}`}>
+                  {data.status}
+                </span>
+              </td>
+              <td className="px-6 py-4">
+                <button
+                  onClick={() => onViewDetails(data)}
+                  className="flex items-center gap-2 p-1 text-blue-500 hover:bg-blue-50 rounded-lg transition-colors"
+                >
+                  <FiEye size={18} />
+                  <span className="text-sm font-medium">View Details</span>
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 

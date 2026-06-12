@@ -1,20 +1,26 @@
 "use client";
 
-import Button from "@/app/(website)/components/ui/button";
-import { FiPlus } from "react-icons/fi";
 import TransactionTable from "../../components/transactions/transaction-table";
-import TransactiontModal from "../../components/transactions/transaction-modal";
+import TransactionModal from "../../components/transactions/transaction-modal";
 import { useState } from "react";
 
 const TransactionManagement = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const handleViewDetails = (transaction: any) => {
+    setSelectedTransaction(transaction);
+    setIsOpen(true);
+  };
 
   const handleCloseModal = () => {
     setIsOpen(false);
+    setSelectedTransaction(null);
   };
 
-  const handleViewDetails = () => {
-    setIsOpen(true);
+  const handleStatusUpdate = () => {
+    setRefreshTrigger(prev => prev + 1);
   };
 
   return (
@@ -27,8 +33,16 @@ const TransactionManagement = () => {
           </p>
         </div>
       </div>
-      <TransactionTable onViewDetails={handleViewDetails} />
-      <TransactiontModal isOpen={isOpen} onClose={handleCloseModal} />
+      <TransactionTable 
+        onViewDetails={handleViewDetails} 
+        refreshTrigger={refreshTrigger}
+      />
+      <TransactionModal 
+        isOpen={isOpen} 
+        onClose={handleCloseModal} 
+        transaction={selectedTransaction}
+        onStatusUpdate={handleStatusUpdate}
+      />
     </div>
   );
 };
